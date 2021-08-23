@@ -5,7 +5,7 @@ import os
 COMMAND_PREFIX = ";"
 
 # The bot token. Keep this secret!
-BOT_TOKEN = "NjkxMjE4NzUzNDc5OTAxMjE1.XncxoQ.PfwwoolIX4iA4o7a1HjYOFamhWI"
+BOT_TOKEN = os.environ.get('RAHBOT_KEY')
 
 # The now playing game. Set this to anything false-y ("", None) to disable it
 NOW_PLAYING = COMMAND_PREFIX + "commands"
