@@ -1,6 +1,4 @@
 from commands.base_command  import BaseCommand
-from utils                  import get_emoji
-from random                 import randint
 import div_colors as col
 
 
@@ -14,9 +12,10 @@ class setup(BaseCommand):
 
     async def handle(self, params, message, client):
         roles = await message.guild.fetch_roles()
-        if 'ETF2L - Premiership' not in roles:
+        role_names = [x.name for x in roles]
+        admin = message.author.guild_permissions.administrator
+        if 'ETF2L - Premiership' not in role_names and admin:
             #AsiaFortress
-
             await self.create_role(message, 'AsiaFortress - Division 1', col.PREM)
             await self.create_role(message, 'AsiaFortress - Division 2', col.DIV2)
             await self.create_role(message, 'AsiaFortress - Division 3', col.MID)
@@ -40,8 +39,14 @@ class setup(BaseCommand):
             await self.create_role(message, 'RGL', col.RGL)
 
             await message.channel.send('Roles have been added')
+            print('Roles added')
+        elif not admin:
+            print('Not admin')
+            await message.channel.send('You do not have permission to run this command')
+        else:
+            print('Has roles')
+            await message.channel.send('This server already has the required roles')
 
     async def create_role(self, message, dregion, color):
         guild = message.guild
         await guild.create_role(name=dregion, color=color)
-        
