@@ -18,3 +18,5 @@ emoji == 1.4.2
 # Rahbot/divgetters/etf2l_player_id_get.py: 1
 # Rahbot/divgetters/ozf_player_id_get.py: 1
 requests == 2.22.0
+
+colour == 0.1.5
