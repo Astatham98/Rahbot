@@ -11,7 +11,7 @@ COMMAND_PREFIX = ";"
 
 
 # The bot token. Keep this secret!
-BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'key')
+BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'key2')
 
 print(BOT_TOKEN)
 # The now playing game. Set this to anything false-y ("", None) to disable it

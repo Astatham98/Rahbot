@@ -22,7 +22,7 @@ class Etf2l():
                     if comp['type'] == '6on6':
                         divs.append(c['division']['name'])
             except TypeError:
-                divs.append('None')
+                divs.append('Open')
             
             count = Counter(divs)
             return 'Etf2l - ' + count.most_common()[0][0]
