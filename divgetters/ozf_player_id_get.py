@@ -8,12 +8,15 @@ class Ozfortress():
         doc = requests.get(league).text
         soup = BeautifulSoup(doc, 'lxml')
         
-        teams = soup.find_all(class_='list-group list-group-flush mb-4')
+        teams = soup.find_all(class_='row ml-0')
         for team in teams:
             if 'ultiduo' not in team.text.strip().lower():
                 newest_team = team.text.strip()
                 break
-        league = re.findall(r' in (.*?) on ',newest_team)[0]
+        try:
+            league = re.findall(r' in (.*?) on ',newest_team)[0]
+        except IndexError:
+            league = re.findall(r' in (.*?) for ',newest_team)[0]
         new_league = self.convert_to_season_rank(league)
         return new_league
         

@@ -1,8 +1,6 @@
 import requests
 from collections import Counter
 from time import sleep
-from divgetters.jprint import Jprint
-import json
 
 
 class Etf2l():
@@ -20,7 +18,6 @@ class Etf2l():
                 for c in competitions:
                     comp = c['competition']
                     if comp['type'] == '6on6':
-                        print(c['division']['name'])
                         if c['division']['name'] is not None:
                             divs.append(c['division']['name'])
             except TypeError:
