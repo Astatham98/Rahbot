@@ -20,7 +20,9 @@ class Etf2l():
                 for c in competitions:
                     comp = c['competition']
                     if comp['type'] == '6on6':
-                        divs.append(c['division']['name'])
+                        print(c['division']['name'])
+                        if c['division']['name'] is not None:
+                            divs.append(c['division']['name'])
             except TypeError:
                 divs.append('Open')
             
