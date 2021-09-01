@@ -7,7 +7,7 @@ class setup(BaseCommand):
     def __init__(self):
        
         description = "Setup roles for a new server"
-        params = []
+        params = None
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
@@ -15,6 +15,7 @@ class setup(BaseCommand):
         role_names = [x.name for x in roles]
         admin = message.author.guild_permissions.administrator
         if 'ETF2L - Premiership' not in role_names and admin:
+            
             #AsiaFortress
             await self.create_role(message, 'AsiaFortress - Division 1', col.PREM)
             await self.create_role(message, 'AsiaFortress - Division 2', col.DIV2)
