@@ -1,22 +1,19 @@
 import requests
 from collections import Counter
 from time import sleep
+from divgetters.jprint import Jprint
+import json
+
+
 class Etf2l():
       def get_div(self, etf2l):
         split = etf2l.split('/')
         id = split[-2]
 
-        response  = requests.get('https://api.etf2l.org/player/{}/results.json'.format(id))
-        response2 = requests.get('https://api.etf2l.org/player/{}.json'.format(id))
+        response  = requests.get('https://api.etf2l.org/player/{}/results.json?since=0'.format(id))
         
-        name = ""
-        if response.status_code == 200:
-            json_format = response2.json()['player']
-            name = json_format['name']
-
         if response.status_code == 200:
             json_format = response.json()
-
             competitions = json_format['results']
             divs = []
             try:
@@ -29,6 +26,5 @@ class Etf2l():
             
             count = Counter(divs)
             return 'Etf2l - ' + count.most_common()[0][0]
-
 
 

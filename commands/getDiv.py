@@ -22,12 +22,15 @@ class Div(BaseCommand):
 
         roles = message.guild.roles
         for role in roles:
-            if div.lower() in role.name.lower():
+            if role.name.lower() in div.lower():
                 if div.lower() == 'rgl':
+                    await message.author.add_roles(role)
                     await message.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(message.author.mention, div))
+                    break
                 else:
                     await message.author.add_roles(role)
                     await message.channel.send('{} has been given the {} role.'.format(message.author.mention, div))
+                    break
 
 
     def get_region(self, link):
