@@ -13,5 +13,6 @@ div_colours = {
     'OzFortress - Intermediate': 0x239B56,
     'OzFortress - Main': 0x2ECC71,
     'OzFortress - Open': 0x82E0AA,
-    'RGL':  0xFF9E00
+    'RGL':  0xFF9E00,
+    'newb': 0xffff00
 }
