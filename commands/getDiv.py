@@ -9,12 +9,12 @@ class Div(BaseCommand):
 
     def __init__(self):
         # A quick description for the help message
-        description = "Gets the div of the player based on their etf2l ID."
+        description = "Get a div based of any region by using your player page: (match.tf for AsiaFortress)"
         # A list of parameters that the command will take as input
         # Parameters will be separated by spaces and fed to the 'params'
         # If no params are expected, leave this list empty or set it to None
         # argument in the handle() method
-        params = ["ID"]
+        params = ["Player page"]
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
