@@ -9,11 +9,16 @@ class AsiaFortress():
         
         team = None
         lists = soup.find_all(class_='list-group-item')
-        for l in lists:
-            if 'asiafortress cup' in l.text.lower():
-                for x in l.find_all('a', href=True):
+        
+        i=0
+        found = False
+        while i <= len(lists)-1 and not found:
+            if 'asiafortress cup' in lists[i].text.lower():
+                for x in lists[i].find_all('a', href=True):
                     if 'team' in x['href']:
                         team = x['href']
+                        found=True
+            i+=1
         
         team_link = 'https://match.tf' + team if team != None else None
         if team_link != None:
@@ -23,4 +28,4 @@ class AsiaFortress():
             posdiv = [x.text.strip() for x in lists if 'AsiaFortress' in x.text.strip()][0]
             return 'AsiaFortress - ' + re.findall(r' in (.*?) for ',posdiv)[0]
         else:
-            return 'Division 4'
+            return 'AsiaFortress - Division 4'
