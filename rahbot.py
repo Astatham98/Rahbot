@@ -68,7 +68,8 @@ def main():
 
     @client.event
     async def on_message(message):
-        await common_handle_message(message)
+        if message.channel.name == settings.CHANNEL:
+            await common_handle_message(message)
 
     @client.event
     async def on_message_edit(before, after):
