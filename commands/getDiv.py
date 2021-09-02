@@ -21,17 +21,19 @@ class Div(BaseCommand):
 
     async def handle(self, params, msg, client):
         div = self.get_region(params[0])
-
         roles = msg.guild.roles
+        newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
+
+        
         for role in roles:
             if role.name.lower() in div.lower():
                 if div.lower() == 'rgl':
-                    await msg.author.add_roles(role)
-                    await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(message.author.mention, div))
+                    await self.add_remove_roles(msg, role, newb_role)
+                    await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
                     break
                 else:
-                    await msg.author.add_roles(role)
+                    await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
                     break
@@ -48,12 +50,18 @@ class Div(BaseCommand):
             return Ozfortress().get_div(link)
         
     async def welcome_message_embed(self, message):
-        embed=discord.Embed(title="Step up and get your role!", description="Get your own role based on your division in any region!", color=0xe69100)
-        embed.add_field(name="Simply type ;div {region link here}", value="Use; etf2l for EU, RGL for NA, match.tf for Asia Pacific, and OzFortress for AU.", inline=True)
-        embed.set_footer(text="Enjoy your say :).")
+        embed=discord.Embed(title="Step up and get your div here!", description="Type ;div {your region profile here}", color=0x00d9ff)
+        embed.add_field(name="EU", value=";div https://etf2l.org/forum/user/109984/", inline=False)
+        embed.add_field(name="NA", value=";div https://rgl.gg/Public/PlayerProfile.aspx?p=76561198136056704&r=40", inline=False)
+        embed.add_field(name="OzFort", value=";div https://ozfortress.com/users/2533", inline=False)
+        embed.add_field(name="Asia", value=";div https://match.tf/users/5640", inline=False)
         await message.channel.send(embed=embed)
         
     async def purge_and_post(self, msg):
         sleep(1)
         await msg.channel.purge()
         await self.welcome_message_embed(msg)
+        
+    async def add_remove_roles(self, msg, role, newb_role):
+        await msg.author.add_roles(role)
+        await msg.author.remove_roles(newb_role)
