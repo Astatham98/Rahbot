@@ -14,10 +14,11 @@ class Etf2l():
         if response.status_code == 200:
             json_format = response.json()
             competitions = json_format['results']
-            divs = ""
+            divs = "Open"
             try:
                 for c in competitions:
                     comp = c['competition']
+                    print(gamemode, c['competition'])
                     if comp['type'] == gamemode and c['merced'] == 0:
                         if c['division']['name'] is not None:
                             divs = c['division']['name']
@@ -25,6 +26,7 @@ class Etf2l():
             except TypeError:
                 divs = 'Open'
             
+            print(divs)
             divs = divs[:-1] if divs[-2].isdigit() else divs
             
             ender = gamemode if gamemode != '6on6' else "6's"
