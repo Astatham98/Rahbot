@@ -2,7 +2,7 @@ import discord
 from commands.base_command  import BaseCommand
 from colour import Color
 
-class EditRole(BaseCommand):
+class EditRoleColor(BaseCommand):
 
     def __init__(self):
         description = "Edits the color of a role - use either a colour name or Hex code"

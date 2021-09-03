@@ -25,7 +25,7 @@ class setup(BaseCommand):
             print('Not admin')
             await message.channel.send('You do not have permission to run this command')
         else:
-            await self.edit_roles(message)
+            await self.edit_roles_color(message)
             print('Has roles')
             await message.channel.send('This server already has the required roles')
 
@@ -35,7 +35,7 @@ class setup(BaseCommand):
         await guild.create_role(name=dregion, color=color)
     
     
-    async def edit_roles(self, message):
+    async def edit_roles_color(self, message):
         roles = await message.guild.fetch_roles()
         for role in roles:
             try:
@@ -43,4 +43,4 @@ class setup(BaseCommand):
                 await role.edit(colour=color)
             except discord.errors.Forbidden:
                 pass
-            
+    

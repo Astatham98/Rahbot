@@ -4,9 +4,10 @@ from time import sleep
 
 
 class Etf2l():
-      def get_div(self, etf2l):
+      def get_div(self, etf2l, sixes=True):
         split = etf2l.split('/')
         id = split[-2]
+        gamemode = '6on6' if sixes else 'highlander'
 
         response  = requests.get('https://api.etf2l.org/player/{}/results.json?since=0'.format(id))
         
@@ -17,7 +18,7 @@ class Etf2l():
             try:
                 for c in competitions:
                     comp = c['competition']
-                    if comp['type'] == '6on6' and c['merced'] == 0:
+                    if comp['type'] == gamemode and c['merced'] == 0:
                         if c['division']['name'] is not None:
                             divs = c['division']['name']
                             break
