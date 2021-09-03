@@ -15,18 +15,16 @@ type true to enable mass (will stitch new name to the end of the current roles)"
     
     async def handle(self, params, message, client):
         parms = ' '.join(params)
-        print(parms)
         names = parms.split(')')
         names = [x.replace('(', '') for x in names]
-        print(names)
         role = names[0]
         new_name = names[1]
         
         mass = True if params[-1].lower().strip() == 'true' else False
         admin = message.author.guild_permissions.administrator
-        print(role, new_name, len(params), mass)
+        print(role, new_name, len(names), mass)
         
-        if len(names) > 2:
+        if len(names) > 3:
             await message.channel.send('Please input roles correctly')
         elif not admin:
             await message.channel.send('Insufficient rank')
