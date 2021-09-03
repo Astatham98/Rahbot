@@ -28,6 +28,7 @@ class Div(BaseCommand):
         
         for role in roles:
             if role.name.lower() == div.lower():
+                print(role.name.lower(), div.lower())
                 if div.lower() == 'rgl':
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
