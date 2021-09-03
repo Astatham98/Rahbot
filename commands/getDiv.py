@@ -39,7 +39,7 @@ class Div(BaseCommand):
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
                     break
-
+        print('No role found')
 
     def get_region(self, link):
         if 'etf2l' in link:
