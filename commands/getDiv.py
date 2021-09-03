@@ -27,7 +27,8 @@ class Div(BaseCommand):
 
         for role in roles:
             if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):
-                if div.lower() == 'rgl':
+                if "rgl" in div.lower():
+                    await self.send_dm(msg.author)
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
@@ -42,9 +43,8 @@ class Div(BaseCommand):
     def get_region(self, link):
         if 'etf2l' in link:
             return Etf2l().get_div(link)
-            return Etf2l().get_div(link)
         elif 'rgl' in link:
-            return 'RGL'
+            return 'RGL - Newcomer'
         elif 'match.tf' in link:
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
@@ -66,3 +66,9 @@ class Div(BaseCommand):
     async def add_remove_roles(self, msg, role, newb_role):
         await msg.author.add_roles(role)
         await msg.author.remove_roles(newb_role)
+    
+    async def send_dm(self, member):
+        channel = await member.create_dm()
+        await channel.send("""Unfortunately RGL does not allow us to get specific divs at the moment.
+To get your requested RGL div, please DM rahmed.
+You've been given newcomer at the moment so you can explore the server while you wait.""")
