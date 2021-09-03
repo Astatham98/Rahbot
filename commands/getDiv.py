@@ -25,7 +25,7 @@ class Div(BaseCommand):
         roles = msg.guild.roles
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
 
-        
+        print(roles)
         for role in roles:
             if role.name.lower() == div.lower():
                 print(role.name.lower(), div.lower())
