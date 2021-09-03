@@ -28,6 +28,6 @@ class Ozfortress():
                     'Division 3': 'Main',
                     'Division 4': 'Open'}
         try:
-            return 'Ozfortress - ' + rank_dict[league]
+            return 'Ozfortress - ' + rank_dict[league] + ' ' + "6's"
         except Exception:
-            return 'Ozfortress - ' + league
+            return 'Ozfortress - ' + league + ' ' + "6's"

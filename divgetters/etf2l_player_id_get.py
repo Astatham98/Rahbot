@@ -26,8 +26,8 @@ class Etf2l():
                 divs = 'Open'
             
             print(divs)
-            #count = Counter(divs)
-            #return 'Etf2l - ' + count.most_common()[0][0]
-            return 'Etf2l - ' + divs
+            
+            ender = gamemode if gamemode != '6on6' else "6's"
+            return 'Etf2l - ' + divs + ' ' + ender
 
 
