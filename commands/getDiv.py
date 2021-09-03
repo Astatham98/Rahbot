@@ -36,10 +36,12 @@ class Div(BaseCommand):
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
+                    print('role given')
                     break
 
     def get_region(self, link):
         if 'etf2l' in link:
+            return Etf2l().get_div(link)
             return Etf2l().get_div(link)
         elif 'rgl' in link:
             return 'RGL'
