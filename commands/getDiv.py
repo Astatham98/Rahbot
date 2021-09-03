@@ -25,10 +25,8 @@ class Div(BaseCommand):
         roles = msg.guild.roles
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
 
-        print(roles)
         for role in roles:
-            if role.name.lower() == div.lower():
-                print(role.name.lower(), div.lower())
+            if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):
                 if div.lower() == 'rgl':
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
@@ -39,7 +37,6 @@ class Div(BaseCommand):
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     await self.purge_and_post(msg)
                     break
-        print('No role found')
 
     def get_region(self, link):
         if 'etf2l' in link:
