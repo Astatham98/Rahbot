@@ -21,12 +21,13 @@ class Div(BaseCommand):
 
     async def handle(self, params, msg, client):
         div = self.get_region(params[0])
+        print(div)
         roles = msg.guild.roles
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
 
         
         for role in roles:
-            if role.name.lower() in div.lower():
+            if role.name.lower() == div.lower():
                 if div.lower() == 'rgl':
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
