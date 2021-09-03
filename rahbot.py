@@ -68,7 +68,7 @@ def main():
 
     @client.event
     async def on_message(message):
-        if message.channel.name not in settings.CHANNEL:
+        if message.channel.name in settings.CHANNEL:
             await common_handle_message(message)
 
     @client.event
