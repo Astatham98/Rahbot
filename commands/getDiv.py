@@ -20,31 +20,20 @@ class Div(BaseCommand):
         super().__init__(description, params)
 
     async def handle(self, params, msg, client):
-        div = self.get_region(params[0])
-        print(div)
+        divs = self.get_region(params[0])
         roles = msg.guild.roles
-        newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
+        
+        for div in divs:
+            await self.give_role(msg, roles, div)
+        await self.purge_and_post(msg)
 
-        for role in roles:
-            if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):
-                if "rgl" in div.lower():
-                    await self.send_dm(msg.author)
-                    await self.add_remove_roles(msg, role, newb_role)
-                    await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
-                    await self.purge_and_post(msg)
-                    break
-                else:
-                    await self.add_remove_roles(msg, role, newb_role)
-                    await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
-                    await self.purge_and_post(msg)
-                    print('role given')
-                    break
+        
 
     def get_region(self, link):
         if 'etf2l' in link:
             return Etf2l().get_div(link)
         elif 'rgl' in link:
-            return 'RGL - Newcomer'
+            return ['RGL - Newcomer']
         elif 'match.tf' in link:
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
@@ -72,3 +61,18 @@ class Div(BaseCommand):
         await channel.send("""Unfortunately RGL does not allow us to get specific divs at the moment.
 To get your requested RGL div, please DM rahmed.
 You've been given newcomer at the moment so you can explore the server while you wait.""")
+        
+    async def give_role(self, msg, roles, div):
+        newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
+        for role in roles:
+            if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):                
+                if "rgl" in div.lower():
+                    await self.send_dm(msg.author)
+                    await self.add_remove_roles(msg, role, newb_role)
+                    await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
+                    break
+                else:
+                    await self.add_remove_roles(msg, role, newb_role)
+                    await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
+                    print('role given')
+                    break
