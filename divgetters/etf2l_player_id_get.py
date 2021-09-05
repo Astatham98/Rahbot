@@ -27,7 +27,10 @@ class Etf2l():
                 except TypeError:
                     div = ('Open')
                 
-                div = div[:-1] if div[-2].isdigit() else div
+                if gamemode == '6on6':
+                    div = div[:-1] if div[-2].isdigit() else div
+                else:
+                    div = div[:-2] if div[-2].isspace() else div
                 
                 ender = gamemode if gamemode != '6on6' else "6's"
                 divs.append('Etf2l - ' + div + ' ' + ender)

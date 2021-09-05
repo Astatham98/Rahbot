@@ -33,7 +33,7 @@ class Div(BaseCommand):
         if 'etf2l' in link:
             return Etf2l().get_div(link)
         elif 'rgl' in link:
-            return ["RGL - Newcomer 6's"]
+            return ["RGL - Newcomer 6s"]
         elif 'match.tf' in link:
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
@@ -67,13 +67,10 @@ You've been given newcomer at the moment so you can explore the server while you
     async def give_role(self, msg, roles, div):
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
         for role in roles:
-            print(role, div)
             if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):                
                 if "rgl" in div.lower():
                     await self.send_dm(msg.author)
-                    print('rgl here 2')
                     await self.add_remove_roles(msg, role, newb_role)
-                    print('rgl here 3')
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
                     break
                 else:
