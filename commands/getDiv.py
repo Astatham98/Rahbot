@@ -33,7 +33,7 @@ class Div(BaseCommand):
         if 'etf2l' in link:
             return Etf2l().get_div(link)
         elif 'rgl' in link:
-            return ['RGL - Newcomer']
+            return ["RGL - Newcomer 6's"]
         elif 'match.tf' in link:
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
