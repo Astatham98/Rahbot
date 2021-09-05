@@ -38,6 +38,8 @@ class Div(BaseCommand):
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
             return Ozfortress().get_div(link)
+        elif 'ugc' in link:
+            return ['ugc']
         
     async def welcome_message_embed(self, message):
         embed=discord.Embed(title="Step up and get your div here!", description="Type ;div {your region profile here}", color=0x00d9ff)
@@ -65,9 +67,9 @@ You've been given newcomer at the moment so you can explore the server while you
     async def give_role(self, msg, roles, div):
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0]
         for role in roles:
+            print(role, div)
             if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):                
                 if "rgl" in div.lower():
-                    
                     await self.send_dm(msg.author)
                     print('rgl here 2')
                     await self.add_remove_roles(msg, role, newb_role)
@@ -79,3 +81,6 @@ You've been given newcomer at the moment so you can explore the server while you
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     print('role given')
                     break
+            elif div == 'ugc':
+                await msg.channel.send('We currently do not accept UGC profiles, please try another profile type.')
+                break
