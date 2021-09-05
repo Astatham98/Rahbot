@@ -73,7 +73,8 @@ def main():
 
     @client.event
     async def on_message_edit(before, after):
-        if len(after.embeds) > 0 and settings.TRACK in after.channel.name: 
+        if len(after.embeds) > 0 and settings.TRACK in after.channel.name:
+            print(after.embeds) 
             pass
         else:
             await common_handle_message(after)
