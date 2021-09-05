@@ -73,7 +73,10 @@ def main():
 
     @client.event
     async def on_message_edit(before, after):
-        await common_handle_message(after)
+        if len(after.embeds) > 0 and settings.TRACK in after.channel.name: 
+            pass
+        else:
+            await common_handle_message(after)
 
     # Finally, set the bot running
     client.run(settings.BOT_TOKEN)
