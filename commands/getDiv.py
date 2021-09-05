@@ -67,8 +67,11 @@ You've been given newcomer at the moment so you can explore the server while you
         for role in roles:
             if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''):                
                 if "rgl" in div.lower():
+                    
                     await self.send_dm(msg.author)
+                    print('rgl here 2')
                     await self.add_remove_roles(msg, role, newb_role)
+                    print('rgl here 3')
                     await msg.channel.send('{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(msg.author.mention, div))
                     break
                 else:
