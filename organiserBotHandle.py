@@ -21,9 +21,14 @@ class OrganiserBotHandle:
 
     async def find_members(self, guild, embed):
         names = []
-        for field in embed.fields[-6:]:
-            if field.value != "-":
-                names.append(field.value.split(" ")[-1])
+        if len(embed.fields) > 2:
+            for field in embed.fields[-6:]:
+                if field.value != "-":
+                    names.append(field.value.split(" ")[-1])
+        else:
+            field = embed.fields[-1].value
+            field_split = field.split("<:tf2_icon:882972601939537941>")
+            names = [x.strip() for x in field_split[1:]]
 
         members = []
         async for member in guild.fetch_members():
