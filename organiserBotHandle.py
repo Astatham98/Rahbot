@@ -1,5 +1,5 @@
 import discord
-
+from autobalance import getRanks
 
 class OrganiserBotHandle:
     def __init__(self, embed=None, message=None):
@@ -38,8 +38,7 @@ class OrganiserBotHandle:
         mentions = []
         for member in members:
             if member.name in names or member.nick in names:
-                mentions.append(member.mention)
+                mentions.append(member)
 
-        await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
-
-
+        #getRanks.get_ranks(mentions, self.message)
+        await self.message.channel.send(" ".join([x.mention for x in mentions]) + " Pug filled! join vc.")
