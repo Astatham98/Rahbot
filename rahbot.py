@@ -3,6 +3,7 @@ import sys
 import settings
 import discord
 import message_handler
+from organiserBotHandle import OrganiserBotHandle
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from events.base_event import BaseEvent
@@ -17,13 +18,16 @@ this.running = False
 # Scheduler that will be used to manage events
 sched = AsyncIOScheduler()
 
+# Intents setup
+intents = discord.Intents.default()
+intents.members = True
 
 ###############################################################################
 
 def main():
     # Initialize the client
     print("Starting up...")
-    client = discord.Client()
+    client = discord.Client(intents=intents)
 
     # Define event handlers for the client
     # on_ready may be called multiple times in the event of a reconnect,
@@ -73,8 +77,8 @@ def main():
     @client.event
     async def on_message_edit(before, after):
         if len(after.embeds) > 0 and settings.TRACK in after.channel.name:
-            print(after.embeds)
-            pass
+            organhandle = OrganiserBotHandle(after.embeds[-1], after)
+            await organhandle.handle()
         else:
             await common_handle_message(after)
 

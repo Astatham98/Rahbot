@@ -1,14 +1,12 @@
 import os
 import configparser
 
-
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 # The prefix that will be used to parse commands.
 # It doesn't have to be a single character!
 COMMAND_PREFIX = ";"
-
 
 # The bot token. Keep this secret!
 BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'key2')
