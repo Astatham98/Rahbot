@@ -16,16 +16,16 @@ class Etf2l():
             if response.status_code == 200:
                 json_format = response.json()
                 competitions = json_format['results']
-                div='Open'
+                div ='Open'
                 try:
                     for c in competitions:
                         comp = c['competition']
-                        if comp['type'] == gamemode and c['merced'] == 0:
+                        if comp['type'] == gamemode and c['merced'] == 0 and 'preseason' not in comp['name'].lower():
                             if c['division']['name'] is not None:
                                 div = c['division']['name']
                                 break
                 except TypeError:
-                    div = ('Open')
+                    div = 'Open'
                 
                 if gamemode == '6on6':
                     div = div[:-1] if div[-2].isdigit() else div
@@ -34,6 +34,6 @@ class Etf2l():
                 
                 ender = gamemode if gamemode != '6on6' else "6's"
                 divs.append('Etf2l - ' + div + ' ' + ender)
-
+        print(divs)
         return divs
 
