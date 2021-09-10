@@ -20,3 +20,6 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 CHANNEL = ["get-yo-div-here", "mod-bot-stuff"]
 TRACK = "pug"
+
+# mention mode toggle
+MENTION_MODE = 0

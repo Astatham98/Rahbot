@@ -1,6 +1,6 @@
-import discord
-from autobalance import getRanks
+from autobalance import mentionByRank
 from autobalance import autobalance
+import settings
 
 
 class OrganiserBotHandle:
@@ -37,12 +37,18 @@ class OrganiserBotHandle:
             if not member.bot:
                 members.append(member)
 
-        mentions = []
+        true_members = []
         for member in members:
             if member.name in names or member.nick in names:
-                mentions.append(member)
+                true_members.append(member)
 
-        balanced = autobalance.autobalance(mentions, self.message)
-        mentions = [x.mention for x in mentions]
+        mentions = [x.mention for x in true_members]
         await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
-        await self.message.channel.send(embed=balanced)
+
+
+        if settings.MENTION_MODE == 0:
+            balanced = autobalance.autobalance(true_members, self.message)
+            await self.message.channel.send(embed=balanced)
+        elif settings.MENTION_MODE == 1:
+            by_rank = mentionByRank.return_ranks_embed(true_members, self.message)
+            await self.message.channel.send(embed=by_rank)
