@@ -1,3 +1,5 @@
+# The div names and colours with the colour hex codes
+
 div_colours = {
     'AsiaFortress - Division 1': 0x4A235A,
     'AsiaFortress - Division 2': 0x6C3483,

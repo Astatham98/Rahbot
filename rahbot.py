@@ -69,6 +69,7 @@ def main():
                 print("Error while handling message", flush=True)
                 raise
 
+    # Only takes in the message if it is in the desired channels
     @client.event
     async def on_message(message):
         if message.channel.name in settings.CHANNEL:

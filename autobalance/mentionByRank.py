@@ -2,25 +2,28 @@ from autobalance import getRanks
 import discord
 
 
+# Returns an embed of users and their divisions
 def return_ranks_embed(members, message):
     divs = {}
     skill_divs = {}
+    # for each members add to a dictionary with {member: div} and {member: skill{
     for member in members:
         roles = member.roles
-        div = getRanks.get_region_roles(roles, message)
-        skill = getRanks.get_skill(div)
+        div = getRanks.get_region_roles(roles, message)  # Gets the users text div
+        skill = getRanks.get_skill(div)  # gets the users skill number
 
         divs[member] = div
         skill_divs[member] = skill
 
+    # Sorts the skill dict from largest to smallest
     skill_divs = dict(sorted(skill_divs.items(), key=lambda item: item[1], reverse=True))
     return create_embed(divs, skill_divs)
 
-
+# Creates an embed based on the ranked skill to show player and div
 def create_embed(div_dict, skill_dict):
     embed = discord.Embed(title="!Divs", color=0x11ff00)
-    team1_text = '\n'.join([x.name for x in list(div_dict.keys())])
-    team2_text = '\n'.join([div_dict.get(x) for x in list(skill_dict.keys())])
+    team1_text = '\n'.join([x.name for x in list(div_dict.keys())])  # users names on a newline
+    team2_text = '\n'.join([div_dict.get(x) for x in list(skill_dict.keys())])  # Users text div
 
     embed.add_field(name="Team 1", value=team1_text, inline=True)
     embed.add_field(name="Team 2", value=team2_text, inline=True)

@@ -16,6 +16,8 @@ class MentionMode(BaseCommand):
         if not admin:
             await message.channel.send('Insufficient rank.')
         else:
+            # if parameters are the desired length either find if its an incorrect input or
+            # set the mention mode number in settings to the desired number
             if len(params) == 1:
                 if int(params[0]) not in [0, 1]:
                     await message.channel.send('Incorrect input')
@@ -23,6 +25,7 @@ class MentionMode(BaseCommand):
                     settings.MENTION_MODE = int(params[0])
                     await message.channel.send('Mention mode is now set to {}.'.format(settings.MENTION_MODE))
             elif len(params) == 0:
+                # If no params are given return the current mention mode
                 await message.channel.send('Mention mode is currently set to {}.'.format(settings.MENTION_MODE))
             else:
                 await message.channel.send('Incorrect parameter input.')

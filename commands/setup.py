@@ -11,11 +11,13 @@ class setup(BaseCommand):
         params = None
         super().__init__(description, params)
 
+    # This code sucks and should be redone
     async def handle(self, params, message, client):
-        roles = await message.guild.fetch_roles()
+        roles = await message.guild.fetch_roles() # Fetches the roles and role names
         role_names = [x.name for x in roles]
         admin = message.author.guild_permissions.administrator
 
+        # Goes through both gamemodes
         for gamemode in ["6's", "highlander"]:
             if 'ETF2L - Premiership' + ' ' + gamemode not in role_names and admin:
                 # Excludes rgl and newb role from getting a gamemode tag
@@ -37,10 +39,12 @@ class setup(BaseCommand):
                 print('Has roles')
                 await message.channel.send('This server already has the required roles for ' + gamemode)
 
+    # Creates a new role based on a string name and a colour
     async def create_role(self, message, dregion, color):
         guild = message.guild
         await guild.create_role(name=dregion, color=color)
 
+    # Edits a specific roles' colour
     async def edit_roles_color(self, message):
         roles = await message.guild.fetch_roles()
         for role in roles:
