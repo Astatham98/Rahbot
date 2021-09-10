@@ -42,6 +42,7 @@ class OrganiserBotHandle:
             if member.name in names or member.nick in names:
                 mentions.append(member)
 
-        autobalance.autobalance(mentions, self.message)
+        balanced = autobalance.autobalance(mentions, self.message)
         mentions = [x.mention for x in mentions]
         await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
+        await self.message.channel.send(embed=balanced)

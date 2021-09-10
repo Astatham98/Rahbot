@@ -2,7 +2,8 @@ def get_ranks(members, message):
     skill_ranks = {}
     for member in members:
         roles = member.roles
-        div_num = get_region_roles(roles, message)
+        div_name = get_region_roles(roles, message)
+        div_num = get_skill(div_name)
         skill_ranks[member] = div_num
 
     return skill_ranks
@@ -21,7 +22,7 @@ def get_region_roles(roles, message):
 def get_roles(region, roles, gamemode):
     for role in roles:
         if region in role.name and gamemode in role.name:
-            return get_skill(parse_role(role.name))
+            return parse_role(role.name)
 
 
 def parse_role(role):
