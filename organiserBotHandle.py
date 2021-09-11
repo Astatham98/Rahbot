@@ -11,7 +11,8 @@ class OrganiserBotHandle:
 
     # If there are all the players in the pug find the members in the discord and ping them
     async def handle(self):
-        if self.get_total_players(self.embed):
+        if self.get_total_players(self.embed) and self.get_game_id(self.embed) != settings.LAST_PLAYED:
+            settings.LAST_PLAYED = self.get_game_id(self.embed)
             await self.find_members(self.guild, self.embed)
 
     # Find the total number of players added
@@ -64,3 +65,9 @@ class OrganiserBotHandle:
             # Mention mode returns players ranked by their dic
             by_rank = mentionByRank.return_ranks_embed(true_members, self.message)
             await self.message.channel.send(embed=by_rank)
+
+    def get_game_id(self, embed):
+        footer = embed.footer.text
+        footer_split = footer.split(" ")  # Gets the footer and splits it
+        id = footer_split[-1]
+        return id

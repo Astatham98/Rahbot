@@ -22,4 +22,7 @@ CHANNEL = ["get-yo-div-here", "mod-bot-stuff"]
 TRACK = "pug"
 
 # mention mode toggle
-MENTION_MODE = 0
+MENTION_MODE = 1
+
+# The id of the last played match
+LAST_PLAYED = ""

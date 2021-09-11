@@ -19,6 +19,7 @@ def return_ranks_embed(members, message):
     skill_divs = dict(sorted(skill_divs.items(), key=lambda item: item[1], reverse=True))
     return create_embed(divs, skill_divs)
 
+
 # Creates an embed based on the ranked skill to show player and div
 def create_embed(div_dict, skill_dict):
     embed = discord.Embed(title="!Divs", color=0x11ff00)
