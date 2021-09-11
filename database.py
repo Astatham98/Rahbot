@@ -13,13 +13,14 @@ class Database:
         self.cur = self.conn.cursor()
 
     def insert_into_leaderboard(self, member):
-        name = member.name.replace(' ', '_')
+        name = member.name
         id = str(member.id)
 
         self.cur.execute(
             'SELECT played FROM leaderboard l WHERE l.id = %s', [id]
         )
         games_played = self.cur.fetchone()
+        print(games_played)
         if games_played:
             new_played = games_played[0] + 1
 
@@ -33,4 +34,3 @@ class Database:
             )
 
         self.conn.commit()
-        self.conn.close()
