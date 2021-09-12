@@ -1,4 +1,6 @@
 from commands.base_command import BaseCommand
+import settings
+import discord
 
 
 # This is a convenient command that automatically generates a helpful
@@ -12,10 +14,16 @@ class Commands(BaseCommand):
 
     async def handle(self, params, message, client):
         from message_handler import COMMAND_HANDLERS
-        msg = message.author.mention + "\n"
+        msg = ""
 
         # Displays all descriptions, sorted alphabetically by command name
         for cmd in sorted(COMMAND_HANDLERS.items()):
-            msg += "\n" + cmd[1].description
+            if not message.author.guild_permissions.administrator and cmd[0] not in settings.ADMIN_COMMANDS:
+                msg += "\n" + cmd[1].description
+            elif message.author.guild_permissions.administrator:
+                msg += "\n" + cmd[1].description
 
-        await message.channel.send(msg)
+        embed = discord.Embed(title="Commands", color=0xff0055)
+        embed.add_field(name="User Commands", value=msg, inline=True)
+
+        await message.channel.send(embed=embed)

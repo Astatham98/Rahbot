@@ -26,3 +26,5 @@ MENTION_MODE = 1
 
 # The id of the last played match
 LAST_PLAYED = ""
+
+ADMIN_COMMANDS = ['editrolecolor', 'editrolename', 'mentionmode', 'rundb', 'setup']

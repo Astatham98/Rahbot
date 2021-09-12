@@ -26,7 +26,7 @@ class Leaderboard(BaseCommand):
                 await message.channel.send(embed=embed)
 
     def create_embed(self, name, played):
-        embed = discord.Embed(title="!Divs", color=0x7434eb)
+        embed = discord.Embed(title="Leaderboard", color=0x7434eb)
         team1_text = '\n'.join(name[:25])
         team2_text = '\n'.join([str(x) for x in played[:25]])
         rank = '\n'.join([str(x+1) for x in range((len(name[:25])))])
