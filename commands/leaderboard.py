@@ -7,7 +7,7 @@ import settings
 class Leaderboard(BaseCommand):
     def __init__(self):
         self.db = Database()
-        description = "Returns a leaderboard. If a player is mentioned after the command their rank will get displayed."
+        description = "Returns a leaderboard."
         params = None
         super().__init__(description, params)
 

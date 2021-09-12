@@ -39,7 +39,8 @@ class Rank(BaseCommand):
             return embed
         except ValueError:
             embed = discord.Embed(title="WARNING", color=0xfc0303)
-            embed.add_field(name="User not recognized", value="This user is currently not in the database", inline=True)
+            embed.add_field(name="User not recognized",
+                            value="This user is currently not in the database - play a pug to get a rank", inline=True)
 
             return embed
 
@@ -57,7 +58,8 @@ class Rank(BaseCommand):
             return embed
         except ValueError:
             embed = discord.Embed(title="WARNING", color=0xfc0303)
-            embed.add_field(name="User not recognized", value="This user is currently not in the database", inline=True)
+            embed.add_field(name="User not recognized",
+                            value="This user is currently not in the database - play a pug to get a rank", inline=True)
 
             return embed
 

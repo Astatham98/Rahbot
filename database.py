@@ -30,7 +30,7 @@ class Database:
             self.cur.execute(
                 'INSERT INTO leaderboard (ID,NAME,PLAYED) \
                              VALUES (%s, %s, %s) ON CONFLICT DO NOTHING',
-                (id, name, 0)
+                (id, name, 1)
             )
 
         self.conn.commit()

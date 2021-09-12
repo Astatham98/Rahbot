@@ -1,6 +1,7 @@
 from autobalance import mentionByRank
 from autobalance import autobalance
 import settings
+from database import Database
 
 
 class OrganiserBotHandle:
@@ -8,6 +9,7 @@ class OrganiserBotHandle:
         self.embed = embed
         self.guild = message.guild
         self.message = message
+        self.db = Database()
 
     # If there are all the players in the pug find the members in the discord and ping them
     async def handle(self):
@@ -57,7 +59,8 @@ class OrganiserBotHandle:
         mentions = [x.mention for x in true_members]  # creates mentions for members
         await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
 
-        # TODO Add players to leaderboard
+        for memb in true_members:
+            self.db.insert_into_leaderboard(memb)
 
         if settings.MENTION_MODE == 0:
             # Mention mode auto balances teams
