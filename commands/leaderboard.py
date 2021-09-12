@@ -12,7 +12,6 @@ class Leaderboard(BaseCommand):
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
-        if message.author.guild_permissions.administrator:
             db = self.db
             id, name, played = db.get_players_and_games_played()
 
@@ -25,14 +24,12 @@ class Leaderboard(BaseCommand):
             else:
                 embed = self.create_embed(name, played)
                 await message.channel.send(embed=embed)
-        else:
-            await message.channel.send('Insufficient rank.')
 
     def create_embed(self, name, played):
         embed = discord.Embed(title="!Divs", color=0x7434eb)
-        team1_text = '\n'.join(name)
-        team2_text = '\n'.join([str(x) for x in played])
-        rank = '\n'.join([str(x+1) for x in range((len(name)))])
+        team1_text = '\n'.join(name[:25])
+        team2_text = '\n'.join([str(x) for x in played[:25]])
+        rank = '\n'.join([str(x+1) for x in range((len(name[:25])))])
 
         embed.add_field(name="Rank", value=rank, inline=True)
         embed.add_field(name="Player", value=team1_text, inline=True)
@@ -41,16 +38,22 @@ class Leaderboard(BaseCommand):
         return embed
 
     def get_player_rank(self, member, ids, played):
-        rank = ids.index(str(member.id))
-        games_played = played[rank]
+        try:
+            rank = ids.index(str(member.id))
+            games_played = played[rank]
 
-        embed = discord.Embed(title="!Divs", color=0x7434eb)
+            embed = discord.Embed(title="Leaderboard", color=0x7434eb)
 
-        embed.add_field(name="Rank", value=rank+1, inline=True)
-        embed.add_field(name="Player", value=member.name, inline=True)
-        embed.add_field(name="Games Played", value=games_played, inline=True)
+            embed.add_field(name="Rank", value=rank+1, inline=True)
+            embed.add_field(name="Player", value=member.name, inline=True)
+            embed.add_field(name="Games Played", value=games_played, inline=True)
 
-        return embed
+            return embed
+        except ValueError:
+            embed = discord.Embed(title="WARNING", color=0xfc0303)
+            embed.add_field(name="User not recognized", value="This user is currently not in the database", inline=True)
+
+            return embed
 
     def clean_id(self, id):
         id = id.replace('>', '')
