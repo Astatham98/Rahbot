@@ -57,6 +57,8 @@ class OrganiserBotHandle:
         mentions = [x.mention for x in true_members]  # creates mentions for members
         await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
 
+        # TODO Add players to leaderboard
+
         if settings.MENTION_MODE == 0:
             # Mention mode auto balances teams
             balanced = autobalance.autobalance(true_members, self.message)

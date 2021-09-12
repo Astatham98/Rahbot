@@ -35,6 +35,7 @@ def parse_role(role):
 
 
 def get_skill(role_name):
+    # TODO make this work for all regions
     skills_nums = {
         'open': 1,
         'low': 2,

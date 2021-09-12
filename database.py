@@ -34,3 +34,13 @@ class Database:
             )
 
         self.conn.commit()
+
+    def get_players_and_games_played(self):
+        self.cur.execute('SELECT * FROM leaderboard ORDER BY leaderboard.played DESC')
+        board = self.cur.fetchall()
+        name, played, id = [], [], []
+        for row in board:
+            id.append(row[0])
+            name.append(row[1])
+            played.append(row[2])
+        return id, name, played
