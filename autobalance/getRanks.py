@@ -3,7 +3,7 @@ def get_ranks(members, message):
     skill_ranks = {}
     for member in members:
         roles = member.roles
-        div_name = get_region_roles(roles, message)  # Gets the role based on the region the channel is in
+        div_name, region = get_region_roles(roles, message)  # Gets the role based on the region the channel is in
         div_num = get_skill(div_name)  # Converts string div role into a skill num
         skill_ranks[member] = div_num
 
@@ -14,11 +14,13 @@ def get_ranks(members, message):
 def get_region_roles(roles, message):
     channel = message.channel.name
     if "eu" in channel.lower():
-        return get_roles('ETF2L', roles, "6's")
+        return get_roles('ETF2L', roles, "6's"), 'ETF2L'
     if "asia" in channel.lower():
-        return get_roles('AsiaFortress', roles, "6's")
+        return get_roles('AsiaFortress', roles, "6's"), 'AsiaFortress'
     if "ozfort" in channel.lower():
-        return get_roles('OzFortress', roles, "6's")
+        return get_roles('OzFortress', roles, "6's"), 'OzFortress'
+    if 'na' in channel.lower():
+        return get_roles('RGL', roles, "6's"), 'RGL'
 
 
 # Goes through a users roles and finds one that meets the requirements
@@ -34,15 +36,44 @@ def parse_role(role):
     return " ".join(role[2:-1])
 
 
-def get_skill(role_name):
+def get_skill(role_name, region):
     # TODO make this work for all regions
-    skills_nums = {
-        'open': 1,
-        'low': 2,
-        'mid': 3,
-        'division 2': 4,
-        'division 1': 5,
-        'premiership': 6
-    }
+    if region == 'ETF2L':
+        skills_nums = {
+            'open': 1,
+            'low': 2,
+            'mid': 3,
+            'division 2': 4,
+            'division 1': 5,
+            'premiership': 6
+        }
+        return skills_nums[role_name.lower().strip()]
 
-    return skills_nums[role_name.lower().strip()]
+    elif region == 'AsiaFortress':
+        skills_nums = {
+            'division 4': 1,
+            'division 3': 2,
+            'division 2': 3,
+            'division 1': 4
+        }
+        return skills_nums[role_name.lower().strip()]
+
+    elif region == 'OzFortress':
+        skills_nums = {
+            'open': 1,
+            'main': 2,
+            'intermediate': 3,
+            'premier': 4
+        }
+        return skills_nums[role_name.lower().strip()]
+
+    elif region == 'RGL':
+        skills_nums = {
+            'newcomer': 1,
+            'amateur': 2,
+            'intermediate': 3,
+            'main': 4,
+            'advanced': 5,
+            'invite': 6
+        }
+        return skills_nums[role_name.lower().strip()]
