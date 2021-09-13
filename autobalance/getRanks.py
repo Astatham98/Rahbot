@@ -40,6 +40,7 @@ def get_skill(role_name, region):
     # TODO make this work for all regions
     if region == 'ETF2L':
         skills_nums = {
+            None: 1,
             'open': 1,
             'low': 2,
             'mid': 3,
@@ -51,6 +52,7 @@ def get_skill(role_name, region):
 
     elif region == 'AsiaFortress':
         skills_nums = {
+            None: 1,
             'division 4': 1,
             'division 3': 2,
             'division 2': 3,
@@ -60,6 +62,7 @@ def get_skill(role_name, region):
 
     elif region == 'OzFortress':
         skills_nums = {
+            None: 1,
             'open': 1,
             'main': 2,
             'intermediate': 3,
@@ -69,6 +72,7 @@ def get_skill(role_name, region):
 
     elif region == 'RGL':
         skills_nums = {
+            None: 1,
             'newcomer': 1,
             'amateur': 2,
             'intermediate': 3,

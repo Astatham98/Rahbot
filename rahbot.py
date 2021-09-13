@@ -78,7 +78,7 @@ def main():
     @client.event
     async def on_message_edit(before, after):
         if len(after.embeds) > 0 and settings.TRACK in after.channel.name:
-            organhandle = OrganiserBotHandle(after.embeds[-1], after)
+            organhandle = OrganiserBotHandle(after.embeds[-1], after, client)
             await organhandle.handle()
         else:
             await common_handle_message(after)
