@@ -2,6 +2,7 @@ import discord
 import utils
 import asyncio
 import copy
+from readyup import closeoldstartnew
 
 
 class Ready:
@@ -15,7 +16,7 @@ class Ready:
         msg = await self.create_message()
         while self.members_list and not self.timeout:
             try:
-                reaction, user = await self.client.wait_for('reaction_add', timeout=60.0, check=self.check)
+                reaction, user = await self.client.wait_for('reaction_add', timeout=90.0, check=self.check)
                 correct_emoji = await self.remove_reaction(msg, user, reaction)
                 if correct_emoji:
                     self.members_list.remove(user)
@@ -23,9 +24,11 @@ class Ready:
 
             except asyncio.TimeoutError:
                 self.timeout = True
-                await self.message.channel.send(', '.join([x.name for x in self.members_list]) + ' did not ready up.',
+                await self.message.channel.send(', '.join([x.name for x in self.members_list]) +
+                                                ' did not ready up. Starting a new pug.',
                                                 delete_after=20.0)
                 await msg.delete()
+                await closeoldstartnew.close_open(self.message, False)
 
         await msg.delete(delay=30.0)
         return not self.timeout

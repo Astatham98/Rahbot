@@ -2,10 +2,13 @@ from autobalance import mentionByRank
 from autobalance import autobalance
 import settings
 from database import Database
+from readyup.readyup import Ready
+from readyup import closeoldstartnew as closeopen
 
 
 class OrganiserBotHandle:
-    def __init__(self, embed=None, message=None):
+    def __init__(self, embed=None, message=None, client=None):
+        self.client = client
         self.embed = embed
         self.guild = message.guild
         self.message = message
@@ -19,12 +22,15 @@ class OrganiserBotHandle:
 
     # Find the total number of players added
     def get_total_players(self, embed):
-        footer = embed.footer.text
-        footer_split = footer.split(" ") # Gets the footer and splits it
-        outof = footer_split[3] # Finds the outof in the embed footer (x/x)
-        outof_split = outof.split("/")
-        current, goal = outof_split[0], outof_split[1]
-        return current == goal  # Returns if the current amount added up is the same as the goal
+        try:
+            footer = embed.footer.text
+            footer_split = footer.split(" ")  # Gets the footer and splits it
+            outof = footer_split[3]  # Finds the outof in the embed footer (x/x)
+            outof_split = outof.split("/")
+            current, goal = outof_split[0], outof_split[1]
+            return current == goal  # Returns if the current amount added up is the same as the goal
+        except AttributeError:
+            return False
 
     # Find the members in the discord and mentions them in some form
     async def find_members(self, guild, embed):
@@ -52,7 +58,9 @@ class OrganiserBotHandle:
             if member.name in names or member.nick in names:
                 true_members.append(member)
 
-        await self.mention_players(true_members)
+        ready = Ready(true_members, self.message, self.client)
+        if await ready.ready_up():
+            await self.mention_players(true_members)
 
     # When the pug is ready mention members and post other embeds based on the mention mode
     async def mention_players(self, true_members):
@@ -70,6 +78,8 @@ class OrganiserBotHandle:
             # Mention mode returns players ranked by their dic
             by_rank = mentionByRank.return_ranks_embed(true_members, self.message)
             await self.message.channel.send(embed=by_rank)
+
+        await closeopen.close_open(self.message, True)
 
     def get_game_id(self, embed):
         footer = embed.footer.text
