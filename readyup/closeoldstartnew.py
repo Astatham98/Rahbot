@@ -15,7 +15,7 @@ async def fail_close(message):
 
 
 async def open(message):
-    msg = '!create "pug" 01-01-2025'
+    msg = '!create "pug" 2025-04-05'
     await message.channel.send(msg, delete_after=5.0)
 
 

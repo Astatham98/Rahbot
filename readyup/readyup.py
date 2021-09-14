@@ -16,7 +16,7 @@ class Ready:
         msg = await self.create_message()
         while self.members_list and not self.timeout:
             try:
-                reaction, user = await self.client.wait_for('reaction_add', timeout=90.0, check=self.check)
+                reaction, user = await self.client.wait_for('reaction_add', timeout=180.0, check=self.check)
                 correct_emoji = await self.remove_reaction(msg, user, reaction)
                 if correct_emoji:
                     self.members_list.remove(user)
