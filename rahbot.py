@@ -72,7 +72,7 @@ def main():
     # Only takes in the message if it is in the desired channels
     @client.event
     async def on_message(message):
-        if message.channel.name in settings.CHANNEL:
+        if message.channel.type != discord.ChannelType.private and message.channel.name in settings.CHANNEL:
             await common_handle_message(message)
 
     @client.event
