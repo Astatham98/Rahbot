@@ -18,7 +18,7 @@ class Ready:
             try:
                 reaction, user = await self.client.wait_for('reaction_add', timeout=180.0, check=self.check)
                 correct_emoji = await self.remove_reaction(msg, user, reaction)
-                if correct_emoji:
+                if correct_emoji and user in self.members_list:
                     self.members_list.remove(user)
                     await self.remove_player_from_embed(msg)
 
