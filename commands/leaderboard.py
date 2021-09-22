@@ -22,7 +22,7 @@ class Leaderboard(BaseCommand):
                 member_id = self.clean_id(params[0])
                 player = client.get_user(int(member_id))
                 embed = self.get_player_rank(player, id, played)
-                msg = await message.channel.send(embed=embed)
+                await message.channel.send(embed=embed)
             else:
                 embed = self.create_embed(name, played)
                 msg = await message.channel.send(embed=embed)

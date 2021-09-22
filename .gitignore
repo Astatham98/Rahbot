@@ -2,4 +2,8 @@
 *.pyc
 *.idea
 config.ini
-test.pyß
+test.py
+venv/
+bin/
+env/
+lib/

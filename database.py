@@ -44,3 +44,18 @@ class Database:
             name.append(row[1])
             played.append(row[2])
         return id, name, played
+
+    def modify_player(self, member, amount: int, remove=False):
+        id = self.parse_mention(member)
+
+        if not remove:
+            self.cur.execute('UPDATE leaderboard SET played = %s WHERE id = %s', (amount, id))
+        else:
+            self.cur.execute('UPDATE leaderboard SET played = played - %s WHERE id = %s', (amount, id))
+
+        self.conn.commit()
+
+    def parse_mention(self, mention: str):
+        """turns a mention into an id string"""
+        id = mention.replace('>', '')
+        return id.split('!')[-1]

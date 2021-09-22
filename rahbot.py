@@ -1,10 +1,8 @@
 import sys
-
 import settings
 import discord
 import message_handler
 from organiserBotHandle import OrganiserBotHandle
-
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from events.base_event import BaseEvent
 from events import *
