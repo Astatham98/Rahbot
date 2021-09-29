@@ -72,6 +72,9 @@ def main():
     async def on_message(message):
         if message.channel.type != discord.ChannelType.private and message.channel.name in settings.CHANNEL:
             await common_handle_message(message)
+        elif message.author.bot and len(message.embeds) > 0:
+            organhandle = OrganiserBotHandle(message.embeds[-1], message, client)
+            await organhandle.handle()
 
     @client.event
     async def on_message_edit(before, after):
