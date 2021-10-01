@@ -24,7 +24,6 @@ class OrganiserBotHandle:
     def get_game_ready(self, embed):
         try:
             if embed.title == "__**Pug** is now on the draft stage!__":
-                print(embed.title)
                 return True
             return False
         except AttributeError:

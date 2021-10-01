@@ -20,7 +20,7 @@ class Database:
             'SELECT played FROM leaderboard l WHERE l.id = %s', [id]
         )
         games_played = self.cur.fetchone()
-        print(games_played)
+        print(games_played, name)
         if games_played:
             new_played = games_played[0] + 1
 
