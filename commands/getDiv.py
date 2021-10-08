@@ -4,6 +4,7 @@ from random import randint
 from divgetters.etf2l_player_id_get import Etf2l
 from divgetters.ozf_player_id_get import Ozfortress
 from divgetters.asia_player_id_get import AsiaFortress
+from divgetters.sa_player_id_get import SA
 from time import sleep
 import discord
 
@@ -40,6 +41,8 @@ class Div(BaseCommand):
             return Ozfortress().get_div(link)
         elif 'ugc' in link:
             return ['ugc']
+        elif 'fbtf' in link:
+            return SA().get_div(link)
 
     # Sends a welcome message to the channel
     async def welcome_message_embed(self, message):
@@ -50,6 +53,7 @@ class Div(BaseCommand):
                         inline=False)
         embed.add_field(name="OzFort", value=";div https://ozfortress.com/users/2533", inline=False)
         embed.add_field(name="Asia", value=";div https://match.tf/users/5640", inline=False)
+        embed.add_field(name="Brazil/South America", value=";div https://fbtf.tf/users/788", inline=False)
         embed.set_footer(text="If you get the incorrect rank or the bot misses a rank, contact Rahmed.")
         await message.channel.send(embed=embed)
 

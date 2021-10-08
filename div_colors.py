@@ -16,5 +16,10 @@ div_colours = {
     'OzFortress - Main': 0x2ECC71,
     'OzFortress - Open': 0x82E0AA,
     'RGL':  0xFF9E00,
+    'FBTF - Iniciante': 0xFF0564,
+    'FBTF - Aberta': 0xFF05B7,
+    'FBTF - Acesso': 0xF405FF,
+    'FBTF - Central': 0xF85EFF,
+    'FBTF - Elite': 0xF19AFF,
     'newb': 0xffff00
 }

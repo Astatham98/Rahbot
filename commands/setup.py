@@ -13,9 +13,14 @@ class setup(BaseCommand):
 
     # This code sucks and should be redone
     async def handle(self, params, message, client):
-        roles = await message.guild.fetch_roles() # Fetches the roles and role names
+        roles = await message.guild.fetch_roles()  # Fetches the roles and role names
         role_names = [x.name for x in roles]
         admin = message.author.guild_permissions.administrator
+
+        if len(params) > 0 and params[0] == 'update':
+            await self.update_roles(role_names, message)
+            await message.channel.send('Updated roles')
+            return
 
         # Goes through both gamemodes
         for gamemode in ["6's", "highlander"]:
@@ -48,8 +53,24 @@ class setup(BaseCommand):
     async def edit_roles_color(self, message):
         roles = await message.guild.fetch_roles()
         for role in roles:
-            try:
-                color = div_colours.get(role.name, role.colour)
-                await role.edit(colour=color)
-            except discord.errors.Forbidden:
-                pass
+            for gamemode in [" 6's", " highlander"]:
+                try:
+                    role_col_name = role.name.replace(gamemode, "")
+                    if not discord.Color(div_colours.get(role_col_name, role.colour.value)) == role.colour:
+                        color = div_colours.get(role_col_name, role.colour)
+                        await role.edit(colour=color)
+                except discord.errors.Forbidden:
+                    pass
+
+    async def update_roles(self, serverRoles, msg):
+        region_names = list(div_colours.keys())
+        role_str = " ".join([x.lower() for x in serverRoles])
+        new = []
+        for name in region_names:
+            if not name.lower() in role_str:
+                new.append(name)
+
+        if len(new) > 0:
+            [await self.create_role(msg, x + " 6's", div_colours.get(x)) for x in new]
+        else:
+            await self.edit_roles_color(msg)
