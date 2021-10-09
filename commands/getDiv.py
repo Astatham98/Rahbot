@@ -53,7 +53,7 @@ class Div(BaseCommand):
                         inline=False)
         embed.add_field(name="OzFort", value=";div https://ozfortress.com/users/2533", inline=False)
         embed.add_field(name="Asia", value=";div https://match.tf/users/5640", inline=False)
-        embed.add_field(name="Brazil/South America", value=";div https://fbtf.tf/users/788", inline=False)
+        embed.add_field(name="SA", value=";div https://fbtf.tf/users/788", inline=False)
         embed.set_footer(text="If you get the incorrect rank or the bot misses a rank, contact Rahmed.")
         await message.channel.send(embed=embed)
 
