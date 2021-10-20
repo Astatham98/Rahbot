@@ -38,5 +38,5 @@ class RGL():
             if divisions.get(current_div, len(divisions)) < divisions.get(best_div):
                 best_div = current_div
 
-        return best_div
+        return ["RGL - " + best_div + " 6's"]
 

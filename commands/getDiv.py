@@ -6,6 +6,7 @@ from divgetters.ozf_player_id_get import Ozfortress
 from divgetters.asia_player_id_get import AsiaFortress
 from divgetters.sa_player_id_get import SA
 from time import sleep
+from divgetters.rgl_player_id_get import RGL
 import discord
 
 
@@ -34,7 +35,7 @@ class Div(BaseCommand):
         if 'etf2l' in link:
             return Etf2l().get_div(link)
         elif 'rgl' in link:
-            return ["RGL - Newcomer 6s"]
+            return RGL().get_div(link)
         elif 'match.tf' in link:
             return AsiaFortress().get_div(link)
         elif 'ozfortress' in link:
@@ -79,21 +80,12 @@ You've been given newcomer at the moment so you can explore the server while you
     async def give_role(self, msg, roles, div):
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0] # Gets the newb role for removal later
         for role in roles:
-            if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''): # parse the roles to make it easily searchable
-                # If rgl give the user the newcomer role and send them a dm
-                if "rgl" in div.lower():
-                    await self.send_dm(msg.author)
-                    await self.add_remove_roles(msg, role, newb_role)
-                    await msg.channel.send(
-                        '{} has been given the {} role. Tell Sigafoo to make a public API if you want divs.'.format(
-                            msg.author.mention, div))
-                    break
-                else:
-                    # Add a new role to the user and remove the newb role
-                    await self.add_remove_roles(msg, role, newb_role)
-                    await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
-                    print('role given')
-                    break
+            if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''): # parse the roles to make it easily searchableç        
+                # Add a new role to the user and remove the newb role
+                await self.add_remove_roles(msg, role, newb_role)
+                await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
+                print('role given')
+                break
             # If the div is ugc then send a specific message
             elif div == 'ugc':
                 await msg.channel.send('We currently do not accept UGC profiles, please try another profile type.')
