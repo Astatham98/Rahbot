@@ -23,7 +23,7 @@ def return_ranks_embed(members, message):
 # Creates an embed based on the ranked skill to show player and div
 def create_embed(div_dict, skill_dict):
     embed = discord.Embed(title="!Divs", color=0x11ff00)
-    team1_text = '\n'.join([x.name for x in list(skill_dict.keys())])  # users names on a newline
+    team1_text = '\n'.join([x.nick if x.nick else x.name for x in list(skill_dict.keys())])  # users names on a newline
     team2_text = '\n'.join([div_dict.get(x) for x in list(skill_dict.keys())])  # Users text div
 
     embed.add_field(name="Player", value=team1_text, inline=True)

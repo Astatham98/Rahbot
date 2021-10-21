@@ -43,12 +43,12 @@ class OrganiserBotHandle:
         # Find all the members that are in the names  or their nick name is in names
         for member in members:
             if member.nick is not None:
-                if member.nick in names:
+                if member.nick.replace('_', '') in names:
                     true_members.append(member)
                 else:
                     members.remove(member)
             else:
-                if member.name in names:
+                if member.name.replace('_', '') in names:
                     true_members.append(member)
 
         await self.mention_players(true_members)
