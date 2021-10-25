@@ -23,7 +23,7 @@ class OrganiserBotHandle:
     # Find the total number of players added
     def get_game_ready(self, embed):
         try:
-            if embed.title == "__**Pug** is now on the draft stage!__":
+            if "is now on the draft stage!" in embed.title:
                 return True
             return False
         except AttributeError:
