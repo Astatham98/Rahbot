@@ -30,7 +30,7 @@ class Etf2l():
                 divs_split = [x for x in div]
                 div = ''.join(divs_split[:-1]) if divs_split[-1] in ('A', 'B') else ''.join(divs_split)
 
-                div = div[:-1] if div[-2].isdigit() else div
+                div = "".join(div.split(" ")[:-1]) if div.split(" ")[-1] == 'Division' else div
 
                 
                 ender = gamemode if gamemode != '6on6' else "6's"
