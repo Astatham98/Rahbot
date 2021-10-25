@@ -12,6 +12,7 @@ div_colours = {
     'ETF2L - Low': 0x5DADE2,
     'ETF2L - Open': 0x85C1E9,
     'OzFortress - Premier': 0x186A3B,
+    'OzFortress - High': 0x1a8a4a,
     'OzFortress - Intermediate': 0x239B56,
     'OzFortress - Main': 0x2ECC71,
     'OzFortress - Open': 0x82E0AA,

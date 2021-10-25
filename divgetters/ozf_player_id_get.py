@@ -11,7 +11,7 @@ class Ozfortress():
         teams = soup.find_all(class_='list-group list-group-flush mb-4')
         teams = soup.find_all(class_='row ml-0') if not teams else teams
         for team in teams:
-            if 'ultiduo' not in team.text.strip().lower():
+            if 'ultiduo' not in team.text.strip().lower() and 'state v state' not in team.text.strip().lower():
                 newest_team = team.text.strip()
                 break
             
