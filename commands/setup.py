@@ -70,7 +70,8 @@ class setup(BaseCommand):
             if not name.lower() in role_str:
                 new.append(name)
 
-        if len(new) > 0:
-            [await self.create_role(msg, x + " 6's", div_colours.get(x)) for x in new]
-        else:
-            await self.edit_roles_color(msg)
+        for gamemode in [" 6's", " highlander"]:
+            if len(new) > 0:
+                [await self.create_role(msg, x + gamemode, div_colours.get(x)) for x in new]
+            else:
+                await self.edit_roles_color(msg)
