@@ -8,6 +8,7 @@ div_colours = {
     'ETF2L - Premiership': 0x1B4F72,
     'ETF2L - Division 1': 0x21618C,
     'ETF2L - Division 2': 0x2874A6,
+    'ETF2L - Division 3': 0x287fb8,
     'ETF2L - Mid': 0x3498DB,
     'ETF2L - Low': 0x5DADE2,
     'ETF2L - Open': 0x85C1E9,
