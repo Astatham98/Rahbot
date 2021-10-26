@@ -21,22 +21,28 @@ class RGL():
         doc = requests.get(link).text
         soup = BeautifulSoup(doc, 'lxml')
 
-        div_table = None
+        div_table = []
+        for gamemode in ['HL S', 'Sixes S']:
+            for table in soup.find_all('table', class_='table table-striped'):
+                row = table.select('tr')[1]
+                if row.a and row.a.text.strip().startswith(gamemode):
+                    div_table.append(table)
+                    break
 
-        for table in soup.find_all('table', class_='table table-striped'):
-            row = table.select('tr')[1]
-            if row.a and row.a.text.strip().startswith('Sixes S'):
-                div_table = table
-                break
+        if not div_table: return ["RGL - Newcomer 6's", "RGL - Newcomer highlander"]
 
-        if not div_table: return 'Newcomer'
+        
+        best_divs = []
+        for table in div_table:
+            best_div = 'Newcomer'
+            for row in table.find_all('tr')[1:]:
+                current_div = row.select('a')[1].text.strip()
+                if divisions.get(current_div, len(divisions)) < divisions.get(best_div):
+                    best_div = current_div
+            best_divs.append(best_div)
+        
+        for i, gamemode in enumerate([" 6's", " highlander"]):
+            best_divs[i] = f"RGL - {best_divs[i]}{gamemode}" 
 
-        best_div = 'Newcomer'
-
-        for row in div_table.find_all('tr')[1:]:
-            current_div = row.select('a')[1].text.strip()
-            if divisions.get(current_div, len(divisions)) < divisions.get(best_div):
-                best_div = current_div
-
-        return ["RGL - " + best_div + " 6's"]
-
+        print(best_divs)
+        return best_divs
