@@ -16,14 +16,28 @@ class OrganiserBotHandle:
 
     # If there are all the players in the pug find the members in the discord and ping them
     async def handle(self):
-        if self.get_game_ready(self.embed) and self.get_game_id(self.embed) != settings.LAST_PLAYED:
-            settings.LAST_PLAYED = self.get_game_id(self.embed)
-            await self.find_members(self.guild, self.embed)
+        if self.get_game_ready(self.embed) and self.get_game_id(self.embed) not in settings.LAST_PLAYED:
+            settings.LAST_PLAYED.append(self.get_game_id(self.embed))
+            true_members = await self.find_members(self.guild, self.embed)
+            await self.mention_players(true_members)
+        elif self.get_game_ready(self.embed) and self.get_game_id(self.embed) == settings.LAST_PLAYED:
+            true_members = await self.find_members(self.guild, self.embed)
+            self.use_mention_mode(true_members)
+        elif self.game_started(self.embed):
+            settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
 
     # Find the total number of players added
     def get_game_ready(self, embed):
         try:
             if "is now on the draft stage!" in embed.title:
+                return True
+            return False
+        except AttributeError:
+            return False
+    
+    def get_game_ready(self, embed):
+        try:
+            if "has started!" in embed.title:
                 return True
             return False
         except AttributeError:
@@ -50,17 +64,18 @@ class OrganiserBotHandle:
             else:
                 if member.name.replace('_', '') in names:
                     true_members.append(member)
-
-        await self.mention_players(true_members)
+        
+        return true_members
 
     # When the pug is ready mention members and post other embeds based on the mention mode
     async def mention_players(self, true_members):
-        # mentions = [x.mention for x in true_members]  # creates mentions for members
-        # await self.message.channel.send(" ".join(mentions) + " Pug filled! join vc.")
 
         for memb in true_members:
             self.db.insert_into_leaderboard(memb)
 
+        await self.use_mention_mode(true_members)
+    
+    async def use_mention_mode(self, true_members):
         if settings.MENTION_MODE == 0:
             # Mention mode auto balances teams
             balanced = autobalance.autobalance(true_members, self.message)

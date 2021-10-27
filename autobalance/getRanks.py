@@ -37,16 +37,16 @@ def parse_role(role):
 
 
 def get_skill(role_name, region):
-    # TODO make this work for all regions
     if region == 'ETF2L':
         skills_nums = {
             None: 1,
             'open': 1,
             'low': 2,
             'mid': 3,
-            'division 2': 4,
-            'division 1': 5,
-            'premiership': 6
+            'division 3': 4,
+            'division 2': 5,
+            'division 1': 6,
+            'premiership': 7
         }
         return skills_nums[role_name.lower().strip()]
 
