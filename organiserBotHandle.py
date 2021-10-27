@@ -97,7 +97,7 @@ class OrganiserBotHandle:
         rest = embed.fields[2].value.split("`")[1:]
         members += rest[::2]
 
-        if re.match(r"{[A-Z]}", members[0]):
+        if re.match(r"〈[A-Z]〉", members[0]):
             members = [''.join(re.split(r"{[A-Z]}", x)[1:]).strip() for x in members]
         print(members)
 
