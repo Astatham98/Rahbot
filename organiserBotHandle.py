@@ -23,7 +23,7 @@ class OrganiserBotHandle:
         elif self.get_game_ready(self.embed) and self.get_game_id(self.embed) == settings.LAST_PLAYED:
             true_members = await self.find_members(self.guild, self.embed)
             self.use_mention_mode(true_members)
-        elif self.game_started(self.embed):
+        elif self.get_game_ready(self.embed):
             settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
 
     # Find the total number of players added
