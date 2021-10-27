@@ -4,6 +4,7 @@ import settings
 from database import Database
 from readyup.readyup import Ready
 from readyup import closeoldstartnew as closeopen
+import re
 
 
 class OrganiserBotHandle:
@@ -95,5 +96,10 @@ class OrganiserBotHandle:
         members = [embed.fields[0].value.split("`")[1], embed.fields[1].value.split("`")[1]]
         rest = embed.fields[2].value.split("`")[1:]
         members += rest[::2]
+
+        if re.match(r"{[A-Z]}", members[0]):
+            members = [''.join(re.split(r"{[A-Z]}", x)[1:]).strip() for x in members]
+        print(members)
+
 
         return members
