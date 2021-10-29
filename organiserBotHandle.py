@@ -23,7 +23,7 @@ class OrganiserBotHandle:
             await self.mention_players(true_members)
         elif self.get_game_ready(self.embed) and self.get_game_id(self.embed) in settings.LAST_PLAYED:
             true_members = await self.find_members(self.guild, self.embed)
-            self.use_mention_mode(true_members)
+            await self.use_mention_mode(true_members)
         elif self.get_game_started(self.embed):
             settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
 
