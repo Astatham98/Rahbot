@@ -47,12 +47,10 @@ class OrganiserBotHandle:
     # Find the members in the discord and mentions them in some form
     async def find_members(self, guild, embed):
         names = self.get_member_names(self.embed)
+        print(names)
 
-        members = []
+        members = [x for x in guild.fetch_members() if not x.bot]
         # Fetch all the guild members
-        async for member in guild.fetch_members():
-            if not member.bot:
-                members.append(member)
 
         true_members = []
         # Find all the members that are in the names  or their nick name is in names
@@ -60,11 +58,9 @@ class OrganiserBotHandle:
             if member.nick is not None:
                 if member.nick.replace('_', '') in names:
                     true_members.append(member)
-                else:
-                    members.remove(member)
-            else:
-                if member.name.replace('_', '') in names:
-                    true_members.append(member)
+            elif member.name.replace('_', '') in names:
+                true_members.append(member)
+            
         
         return true_members
 
