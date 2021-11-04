@@ -49,8 +49,12 @@ class OrganiserBotHandle:
         names = self.get_member_names(self.embed)
         print(names)
 
-        members = [x for x in guild.fetch_members() if not x.bot]
+        members = []
         # Fetch all the guild members
+        async for member in guild.fetch_members():
+            if not member.bot:
+                members.append(member)
+
 
         true_members = []
         # Find all the members that are in the names  or their nick name is in names
