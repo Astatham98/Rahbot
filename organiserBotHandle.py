@@ -93,8 +93,7 @@ class OrganiserBotHandle:
         return id
 
     def get_member_names(self, embed):
-        #members = [embed.fields[0].value.split("`")[1], embed.fields[1].value.split("`")[1]]
-        members = []
+        members = [embed.fields[0].value.split("`")[1], embed.fields[1].value.split("`")[1]]
         rest = embed.fields[2].value.split("`")[1:]
         members += rest[::2]
 
