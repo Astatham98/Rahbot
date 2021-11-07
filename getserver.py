@@ -20,7 +20,7 @@ def get_server(map):
     map_name = get_map(map)
     if map_name is None: return None, None
 
-    response = requests.get('https://serveme.tf/api/reservations/new?api_key={}'.format(api_key))
+    response = requests.get('https://direct.serveme.tf/api/reservations/new?api_key={}'.format(api_key), verify=False)
     print(response.status_code)
     if response.status_code == 200:
         json_response = response.json()
@@ -28,7 +28,7 @@ def get_server(map):
         url = json_response["actions"]["find_servers"] + "?api_key={}".format(api_key)
         time_slot = json_response["reservation"]
 
-        response = requests.post(url=url, data=time_slot).json()
+        response = requests.post(url=url, data=time_slot, verify=False).json()
         servers = response["servers"]
         possible_servers = [x for x in servers if x["flag"] == "fr"]
         server = possible_servers[0]["id"]
@@ -43,7 +43,7 @@ def get_server(map):
         time_slot["enable_plugins"] = True
 
 
-        response = requests.post(url=url, json=time_slot).json()
+        response = requests.post(url=url, json=time_slot, verify=False).json()
 
         server_info = response["reservation"]["server"]
         ip_and_port = server_info["ip_and_port"]
