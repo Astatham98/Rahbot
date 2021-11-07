@@ -16,41 +16,45 @@ def get_rcon():
 
 def get_server(map):
     api_key = get_key()
+    print(api_key, type(api_key))
     map_name = get_map(map)
     if map_name is None: return None, None
 
     response = requests.get('https://serveme.tf/api/reservations/new?api_key={}'.format(api_key))
-    json_response = response.json()
+    if response.status_code == 200:
+        json_response = response.json()
 
-    url = json_response["actions"]["find_servers"] + "?api_key={}".format(api_key)
-    time_slot = json_response["reservation"]
+        url = json_response["actions"]["find_servers"] + "?api_key={}".format(api_key)
+        time_slot = json_response["reservation"]
 
-    response = requests.post(url=url, data=time_slot).json()
-    servers = response["servers"]
-    possible_servers = [x for x in servers if x["flag"] == "fr"]
-    server = possible_servers[0]["id"]
+        response = requests.post(url=url, data=time_slot).json()
+        servers = response["servers"]
+        possible_servers = [x for x in servers if x["flag"] == "fr"]
+        server = possible_servers[0]["id"]
 
-    url = response["actions"]["create"] + "?api_key={}".format(api_key)
-    
-    time_slot["rcon"] = get_rcon()
-    time_slot["password"] = "rahmix"
-    time_slot["server_id"] = int(server)
-    time_slot["server_config_id"] = 4 if "koth" not in map_name else 24 #6v6 5cp. TODO change this to work with different maps / gamemodes
-    time_slot["first_map"] = map_name
-    time_slot["enable_plugins"] = True
+        url = response["actions"]["create"] + "?api_key={}".format(api_key)
+        
+        time_slot["rcon"] = get_rcon()
+        time_slot["password"] = "rahmix"
+        time_slot["server_id"] = int(server)
+        time_slot["server_config_id"] = 4 if "koth" not in map_name else 24
+        time_slot["first_map"] = map_name
+        time_slot["enable_plugins"] = True
 
-    response = requests.post(url=url, json=time_slot).json()
 
-    server_info = response["reservation"]["server"]
-    ip_and_port = server_info["ip_and_port"]
-    password = response["reservation"]["password"]
-    rcon = response["reservation"]["rcon"]
-    print(rcon)
+        response = requests.post(url=url, json=time_slot).json()
 
-    full_ip = "connect " + ip_and_port + f"; password {password}"
+        server_info = response["reservation"]["server"]
+        ip_and_port = server_info["ip_and_port"]
+        password = response["reservation"]["password"]
+        rcon = response["reservation"]["rcon"]
+        print(rcon)
 
-    print(full_ip)
-    return full_ip, rcon
+        full_ip = "connect " + ip_and_port + f"; password {password}"
+
+        print(full_ip)
+        return full_ip, rcon
+    return None, "No API response."
 
 def get_map(map):
 

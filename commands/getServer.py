@@ -1,12 +1,9 @@
 from commands.base_command import BaseCommand
-from database import Database
-import discord
 from getserver import get_server
 
 
 class Getserver(BaseCommand):
     def __init__(self):
-        self.db = Database()
         description = "Gets a french server with whatever map you want."
         params = ["map"]
         super().__init__(description, params)
@@ -15,7 +12,10 @@ class Getserver(BaseCommand):
         map_choice = params[0]
         server, rcon = get_server(map_choice)
         if server is None: 
-            await message.channel.send('Please enter a valid map name')
+            if rcon is None:
+                await message.channel.send('Please enter a valid map name')
+            else:
+                await message.channel.send('ERROR ACCESSING THE API')
         else:
             await message.channel.send('Sever IP is: \n {}'.format(server))
         
