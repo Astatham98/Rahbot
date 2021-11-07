@@ -21,6 +21,7 @@ def get_server(map):
     if map_name is None: return None, None
 
     response = requests.get('https://serveme.tf/api/reservations/new?api_key={}'.format(api_key))
+    print(response.status_code)
     if response.status_code == 200:
         json_response = response.json()
 
