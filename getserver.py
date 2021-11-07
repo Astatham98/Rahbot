@@ -17,6 +17,7 @@ def get_rcon():
 def get_server(map):
     api_key = get_key()
     map_name = get_map(map)
+    if map_name is None: return None, None
 
     response = requests.get('https://serveme.tf/api/reservations/new?api_key={}'.format(api_key))
     json_response = response.json()
@@ -43,19 +44,22 @@ def get_server(map):
     server_info = response["reservation"]["server"]
     ip_and_port = server_info["ip_and_port"]
     password = response["reservation"]["password"]
-    
+    rcon = response["reservation"]["rcon"]
+    print(rcon)
+
     full_ip = "connect " + ip_and_port + f"; password {password}"
 
     print(full_ip)
-    return full_ip
+    return full_ip, rcon
 
 def get_map(map):
-    maps = {"Process": "cp_process_f9a", 
-            "Sunshine": "cp_sunshine",
-            "Snakewater": "cp_snakewawter_final1",
-            "Metalworks": "cp_metalworks",
-            "Gullywash": "cp_gullywash_f4a",
-            "Reckoner": "cp_reckoner_rc6",
-            "Clearcut": "koth_clearcut_b15d", 
-            "Granary": "cp_granary_pro_rc8"}
-    return maps[map]
+
+    maps = {"process": "cp_process_f9a", 
+            "sunshine": "cp_sunshine",
+            "snakewater": "cp_snakewawter_final1",
+            "metalworks": "cp_metalworks",
+            "gullywash": "cp_gullywash_f4a",
+            "reckoner": "cp_reckoner_rc6",
+            "clearcut": "koth_clearcut_b15d", 
+            "granary": "cp_granary_pro_rc8"}
+    return maps.get(map.lower(), None)
