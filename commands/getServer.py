@@ -20,4 +20,4 @@ class Getserver(BaseCommand):
             await message.channel.send('Sever IP is: \n {}'.format(server))
         
             dm_channel = await message.author.create_dm()
-            await dm_channel.send("The rcon password for this servr is: {}".format(rcon))
+            await dm_channel.send("The rcon password for this server is: {}".format(rcon))
