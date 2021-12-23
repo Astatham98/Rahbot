@@ -17,7 +17,7 @@ class Getserver(BaseCommand):
             else:
                 await message.channel.send('ERROR ACCESSING THE API')
         else:
-            await message.channel.send('Sever IP is: \n {}'.format(server))
+            await message.channel.send('Server IP is: \n{}'.format(server))
         
             dm_channel = await message.author.create_dm()
             await dm_channel.send("The rcon password for this server is: {}".format(rcon))
