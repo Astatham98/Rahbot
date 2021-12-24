@@ -20,7 +20,7 @@ def get_region_roles(roles, message):
     if "ozfort" in channel.lower():
         return get_roles('OzFortress', roles, "6's"), 'OzFortress'
     if 'na' in channel.lower():
-        return get_roles('RGL', roles, "6's"), 'RGL'
+        return get_roles('RGL', roles, "6s"), 'RGL'
 
 
 # Goes through a users roles and finds one that meets the requirements
