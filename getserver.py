@@ -61,7 +61,7 @@ def get_map(map):
 
     maps = {"process": "cp_process_f9a", 
             "sunshine": "cp_sunshine",
-            "snakewater": "cp_snakewawter_final1",
+            "snakewater": "cp_snakewater_final1",
             "metalworks": "cp_metalworks",
             "gullywash": "cp_gullywash_f4a",
             "reckoner": "cp_reckoner_rc6",
