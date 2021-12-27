@@ -2,6 +2,8 @@
 import os
 import configparser
 import requests
+import string
+import random
 
 def get_key():
     config = configparser.ConfigParser()
@@ -9,9 +11,8 @@ def get_key():
     return os.environ.get('SERVERME_KEY') if os.environ.get('SERVERME_KEY') is not None else config.get('KEYS', 'servermekey')
 
 def get_rcon():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    return os.environ.get('RCON') if os.environ.get('RCON') is not None else config.get('KEYS', 'rcon')
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
+
 
 
 def get_server(map):
