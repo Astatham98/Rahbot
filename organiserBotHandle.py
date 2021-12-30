@@ -33,7 +33,7 @@ class OrganiserBotHandle:
             if "is now on the draft stage!" in embed.title:
                 return True
             return False
-        except AttributeError:
+        except Exception:
             return False
     
     def get_game_started(self, embed):
