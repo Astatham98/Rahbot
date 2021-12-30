@@ -3,13 +3,13 @@ import discord
 
 
 # Returns an embed of users and their divisions
-def return_ranks_embed(members, message):
+def return_ranks_embed(members):
     divs = {}
     skill_divs = {}
     # for each members add to a dictionary with {member: div} and {member: skill{
     for member in members:
         roles = member.roles
-        div, region = getRanks.get_region_roles(roles, message)  # Gets the users text div
+        div, region = getRanks.get_region_roles(roles)  # Gets the users text div
         skill = getRanks.get_skill(div, region)  # gets the users skill number
 
         divs[member] = div

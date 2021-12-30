@@ -83,7 +83,7 @@ class OrganiserBotHandle:
             await self.message.channel.send(embed=balanced)
         elif settings.MENTION_MODE == 1:
             # Mention mode returns players ranked by their dic
-            by_rank = mentionByRank.return_ranks_embed(true_members, self.message)
+            by_rank = mentionByRank.return_ranks_embed(true_members)
             await self.message.channel.send(embed=by_rank)
 
     def get_game_id(self, embed):

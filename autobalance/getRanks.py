@@ -11,17 +11,9 @@ def get_ranks(members, message):
 
 
 # Gets the get_role based on the location of the channel name
-def get_region_roles(roles, message):
-    channel = message.channel.name
-    if "eu" in channel.lower():
-        return get_roles('ETF2L', roles, "6's"), 'ETF2L'
-    if "asia" in channel.lower():
-        return get_roles('AsiaFortress', roles, "6's"), 'AsiaFortress'
-    if "ozfort" in channel.lower():
-        return get_roles('OzFortress', roles, "6's"), 'OzFortress'
-    if 'na' in channel.lower():
-        return get_roles('RGL', roles, "6s"), 'RGL'
-
+def get_region_roles(roles):
+    return get_role_and_region(roles, "6's")
+       
 
 # Goes through a users roles and finds one that meets the requirements
 def get_roles(region, roles, gamemode):
@@ -29,6 +21,10 @@ def get_roles(region, roles, gamemode):
         if region in role.name and gamemode in role.name:
             return parse_role(role.name)
 
+def get_role_and_region(roles, gamemode):
+    for role in roles:
+        if gamemode in role.name or gamemode.replace("'", "") in role.name:
+            return parse_role(role.name), role.name.split(' ')[0]
 
 # Parses roles and gets the div only
 def parse_role(role):
@@ -43,10 +39,10 @@ def get_skill(role_name, region):
             'open': 1,
             'low': 2,
             'mid': 3,
-            'division 3': 4,
-            'division 2': 5,
-            'division 1': 6,
-            'premiership': 7
+            'division 3': 3,
+            'division 2': 4,
+            'division 1': 5,
+            'premiership': 6
         }
         return skills_nums[role_name.lower().strip()]
 
@@ -56,7 +52,7 @@ def get_skill(role_name, region):
             'division 4': 1,
             'division 3': 2,
             'division 2': 3,
-            'division 1': 4
+            'division 1': 6
         }
         return skills_nums[role_name.lower().strip()]
 
@@ -64,9 +60,9 @@ def get_skill(role_name, region):
         skills_nums = {
             None: 1,
             'open': 1,
-            'main': 2,
-            'intermediate': 3,
-            'premier': 4
+            'main':3,
+            'intermediate': 4,
+            'premier': 6
         }
         return skills_nums[role_name.lower().strip()]
 
