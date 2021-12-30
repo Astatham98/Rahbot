@@ -10,7 +10,6 @@ def return_ranks_embed(members, message):
     for member in members:
         roles = member.roles
         div, region = getRanks.get_region_roles(roles, message)  # Gets the users text div
-        div = div if div is not None else 'Newcomer'
         skill = getRanks.get_skill(div, region)  # gets the users skill number
 
         divs[member] = div
