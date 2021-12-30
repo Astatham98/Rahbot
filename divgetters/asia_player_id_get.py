@@ -25,7 +25,7 @@ class AsiaFortress():
             doc = requests.get(team_link).text
             soup = BeautifulSoup(doc, 'lxml')
             lists = soup.find_all('div', class_='panel-heading')
-            posdiv = [x.text.strip() for x in lists if 'AsiaFortress' in x.text.strip()][0]
+            posdiv = [x.text.strip() for x in lists if 'AsiaFortress' in x.text.strip() and 'placed' in x.text.strip()][0]
             return ['AsiaFortress - ' + re.findall(r' in (.*?) for ',posdiv)[0] + ' ' + "6's"]
         else:
             return ['AsiaFortress - Division 4' + ' ' + "6's"]
