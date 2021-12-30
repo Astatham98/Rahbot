@@ -20,7 +20,7 @@ emoji == 1.4.2
 requests == 2.26.0
 
 colour == 0.1.5
-lxml == 4.6.3
+lxml == 4.6.5
 
 dj-database-url
 psycopg2-binary == 2.8.3
