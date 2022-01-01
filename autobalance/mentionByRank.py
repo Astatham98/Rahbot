@@ -37,6 +37,7 @@ def create_embed(div_dict, skill_dict, region_dict):
 
 def get_shortened(region):
     regions = {'AsiaFortress': 'Asia',
-               'OzFortress': 'OzFort'}
+               'OzFortress': 'OzFort',
+               None: 'Unknown'}
     
     return regions.get(region, region)

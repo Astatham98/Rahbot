@@ -25,7 +25,10 @@ class OrganiserBotHandle:
             true_members = await self.find_members(self.guild, self.embed)
             await self.use_mention_mode(true_members)
         elif self.get_game_started(self.embed):
-            settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
+            game_id = self.get_game_id(self.embed)
+            if game_id in settings.LAST_PLAYED: settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
+            #TODO Track the teams for med picking
+            await self.get_teams(self.embed)
 
     # Find the total number of players added
     def get_game_ready(self, embed):
@@ -67,6 +70,9 @@ class OrganiserBotHandle:
             
         
         return true_members
+    
+    async def get_teams(self, embed):
+        print(embed.fields[0])
 
     # When the pug is ready mention members and post other embeds based on the mention mode
     async def mention_players(self, true_members):
