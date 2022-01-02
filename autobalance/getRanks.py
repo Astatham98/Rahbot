@@ -36,23 +36,23 @@ def get_skill(role_name, region):
     if region == 'ETF2L':
         skills_nums = {
             None: 1,
-            'open': 1,
-            'low': 2,
-            'mid': 3,
-            'division 3': 3,
-            'division 2': 4,
-            'division 1': 5,
-            'premiership': 6
+            'open': 4,
+            'low': 7,
+            'mid': 10,
+            'division 3': 11,
+            'division 2': 15,
+            'division 1': 18,
+            'premiership': 22
         }
         return skills_nums[role_name.lower().strip()]
 
     elif region == 'AsiaFortress':
         skills_nums = {
             None: 1,
-            'division 4': 1,
-            'division 3': 2,
-            'division 2': 3,
-            'division 1': 6
+            'division 4': 2,
+            'division 3': 5,
+            'division 2': 14,
+            'division 1': 19
         }
         return skills_nums[role_name.lower().strip()]
 
@@ -60,20 +60,20 @@ def get_skill(role_name, region):
         skills_nums = {
             None: 1,
             'open': 1,
-            'main':3,
-            'intermediate': 4,
-            'premier': 6
+            'main':13,
+            'intermediate': 12,
+            'premier': 20
         }
         return skills_nums[role_name.lower().strip()]
 
     elif region == 'RGL':
         skills_nums = {
             None: 1,
-            'newcomer': 1,
-            'amateur': 2,
-            'intermediate': 3,
-            'main': 4,
-            'advanced': 5,
-            'invite': 6
+            'newcomer': 3,
+            'amateur': 6,
+            'intermediate': 9,
+            'main': 13,
+            'advanced': 17,
+            'invite': 2
         }
         return skills_nums[role_name.lower().strip()]
