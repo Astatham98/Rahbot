@@ -72,8 +72,8 @@ class OrganiserBotHandle:
         return true_members
     
     async def get_teams(self, embed):
-        red = [self.parse_mention(x) for x in embed.fields[0].value.split('\u200b').strip()]
-        blue = [self.parse_mention(x) for x in embed.fields[1].value.split('\u200b').strip()]
+        red = [self.parse_mention(x.strip()) for x in embed.fields[0].value.split('\u200b')]
+        blue = [self.parse_mention(x.strip()) for x in embed.fields[1].value.split('\u200b')]
         print(red, blue)
         
     def parse_mention(self, mention: str):
