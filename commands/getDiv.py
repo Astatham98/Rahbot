@@ -49,7 +49,7 @@ class Div(BaseCommand):
     async def welcome_message_embed(self, message):
         embed = discord.Embed(title="Step up and get your div here!",
                               description="Type ;div {your region profile here}", color=0x00d9ff)
-        embed.add_field(name="EU", value="~~;div https://etf2l.org/forum/user/109984/~~ EU IS CURRENTLY BROKEN. DM AN ADMIN FOR HELP", inline=False)
+        embed.add_field(name="EU", value=";div https://etf2l.org/forum/user/109984/", inline=False)
         embed.add_field(name="NA", value=";div https://rgl.gg/Public/PlayerProfile.aspx?p=76561198136056704&r=40",
                         inline=False)
         embed.add_field(name="OzFort", value=";div https://ozfortress.com/users/2533", inline=False)
