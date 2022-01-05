@@ -74,6 +74,6 @@ def get_skill(role_name, region):
             'intermediate': 9,
             'main': 13,
             'advanced': 17,
-            'invite': 2
+            'invite': 21
         }
         return skills_nums[role_name.lower().strip()]
