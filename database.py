@@ -66,7 +66,12 @@ class Database:
         self.cur.execute('UPDATE leaderboard SET immunity = true WHERE id = %s', [member_id])
         self.conn.commit()
 
+    def reset_immunity(self):
+        self.cur.execute('UPDATE leaderboard SET immunity = false WHERE immunity = true')
+        self.conn.commit()
+
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
         return id.split('!')[-1]
+        
