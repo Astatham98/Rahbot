@@ -54,6 +54,15 @@ class Database:
             self.cur.execute('UPDATE leaderboard SET played = played - %s WHERE id = %s', (amount, id))
 
         self.conn.commit()
+    
+    def immune(self, member_id):
+        self.cur.execute('SELECT immunity FROM leaderboard l WHERE l.id = %s', [member_id])
+        immunity = self.cur.fetchone()
+        return immunity[0]
+    
+    def set_immune(self, member_id):
+        self.cur.execute('UPDATE leaderboard SET immunity = true WHERE id = %s', [member_id])
+        self.conn.commit()
 
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""

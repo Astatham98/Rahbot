@@ -72,14 +72,15 @@ class OrganiserBotHandle:
         return true_members
     
     async def get_teams(self, embed):
-        red = [self.parse_mention(x.strip()) for x in embed.fields[0].value.split('\u200b')]
-        blue = [self.parse_mention(x.strip()) for x in embed.fields[1].value.split('\u200b')]
-        print(red, blue)
+        red = [self.parse_mention(x.strip()) for x in embed.fields[0].value.split('\u200b')][1:]
+        blue = [self.parse_mention(x.strip()) for x in embed.fields[1].value.split('\u200b')][1:]
+        settings.CURRENT_GAME = {'Red': red, 'Blue': blue}
         
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
-        return id.split('!')[-1]
+        id = id.replace('<@', '')
+        return id
 
     # When the pug is ready mention members and post other embeds based on the mention mode
     async def mention_players(self, true_members):
