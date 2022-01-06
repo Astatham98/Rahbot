@@ -58,7 +58,9 @@ class Database:
     def immune(self, member_id):
         self.cur.execute('SELECT immunity FROM leaderboard l WHERE l.id = %s', [member_id])
         immunity = self.cur.fetchone()
-        return immunity[0]
+        if immunity is not None:
+            return immunity[0]
+        return None
     
     def set_immune(self, member_id):
         self.cur.execute('UPDATE leaderboard SET immunity = true WHERE id = %s', [member_id])

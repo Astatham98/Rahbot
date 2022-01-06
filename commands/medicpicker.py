@@ -13,17 +13,20 @@ class MedicPicker(BaseCommand):
 
     async def handle(self, params, message, client):
         team = self.find_team(message)
-        eligible = []
-        for player in team:
-            print(player)
-            if not self.db.immune(player):
-                eligible.append(player)
-        
-        chosen_player_id = random.choice(eligible)
-        chosen_player = await client.fetch_user(int(chosen_player_id))
-        
-        await message.channel.send(f"{chosen_player.name} has been selected to play medic.")
-        self.db.set_immune(chosen_player_id)
+        if team is not None:
+            eligible = []
+            for player in team:
+                print(player, type(player))
+                if self.db.immune(player) is False:
+                    eligible.append(player)
+            
+            chosen_player_id = random.choice(eligible)
+            chosen_player = await client.fetch_user(int(chosen_player_id))
+            
+            await message.channel.send(f"{chosen_player.name} has been selected to play medic.")
+            self.db.set_immune(chosen_player_id)
+        else:
+            await message.channel.send('Unable to find the corresponding team.')
        
     def find_team(self, message):
         author = message.author
