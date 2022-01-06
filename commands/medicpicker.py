@@ -27,7 +27,7 @@ class MedicPicker(BaseCommand):
                     if self.db.immune(player) is False:
                         eligible.append(player)
                 
-                await message.channel.send(f'Picking from {", ".join([client.fetch_user(int(x)) for x in eligible])}')
+                await message.channel.send(f'Picking a medic from {", ".join([await client.fetch_user(int(x)) for x in eligible])}')
                 chosen_player_id = random.choice(eligible)
                 chosen_player = await client.fetch_user(int(chosen_player_id))
                 
