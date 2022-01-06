@@ -15,6 +15,7 @@ class MedicPicker(BaseCommand):
         team = self.find_team(message)
         eligible = []
         for player in team:
+            print(player)
             if not self.db.immune(player):
                 eligible.append(player)
         
