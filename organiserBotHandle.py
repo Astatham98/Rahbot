@@ -26,8 +26,7 @@ class OrganiserBotHandle:
             await self.use_mention_mode(true_members)
         elif self.get_game_started(self.embed):
             game_id = self.get_game_id(self.embed)
-            if game_id in settings.LAST_PLAYED: settings.LAST_PLAYED.remove(self.get_game_id(self.embed))
-            #TODO Track the teams for med picking
+            if game_id in settings.LAST_PLAYED: settings.LAST_PLAYED.remove(game_id)
             await self.get_teams(self.embed)
 
     # Find the total number of players added
@@ -75,6 +74,7 @@ class OrganiserBotHandle:
         red = [self.parse_mention(x.strip()) for x in embed.fields[0].value.split('\u200b')][1:]
         blue = [self.parse_mention(x.strip()) for x in embed.fields[1].value.split('\u200b')][1:]
         settings.CURRENT_GAME = {'Red': red, 'Blue': blue}
+        print(settings.CURRENT_GAME)
         
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
