@@ -12,7 +12,7 @@ from database import Database
 class ResetImmunityEvent(BaseEvent):
 
     def __init__(self):
-        interval_minutes = 20  # Set the interval for this event
+        interval_minutes = 60  # Set the interval for this event
         self.db = Database()
         super().__init__(interval_minutes)
 
@@ -21,5 +21,5 @@ class ResetImmunityEvent(BaseEvent):
     async def run(self, client):
         now = datetime.now()
 
-        if now.hour == 7:
+        if now.hour == 5:
             self.db.reset_immunity()
