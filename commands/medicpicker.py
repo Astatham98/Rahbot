@@ -52,5 +52,5 @@ class MedicPicker(BaseCommand):
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
-        id = id.replace('<@', '')
+        id = id.replace('<@!', '')
         return id
