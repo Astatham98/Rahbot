@@ -78,6 +78,11 @@ class OrganiserBotHandle:
         
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
+        if re.match(r"〈[A-Z]〉", mention):
+            print(mention)
+            mention = re.split(r"〈[A-Z]〉", mention)[1:].strip()
+            print(mention)
+
         id = mention.replace('>', '')
         id = id.replace('<@', '')
         return id
