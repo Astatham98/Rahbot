@@ -13,7 +13,7 @@ class AsiaFortress():
         i=0
         found = False
         while i <= len(lists)-1 and not found:
-            if 'played in asiafortress cup' in lists[i].text.lower():
+            if 'played in asiafortress cup' in lists[i].text.lower() or 'playing in asiafortress cup' in lists[i].text.lower():
                 for x in lists[i].find_all('a', href=True):
                     if 'team' in x['href']:
                         team = x['href']
