@@ -50,11 +50,9 @@ def get_server(map):
         ip_and_port = server_info["ip_and_port"]
         password = response["reservation"]["password"]
         rcon = response["reservation"]["rcon"]
-        print(rcon)
 
         full_ip = "connect " + ip_and_port + f"; password {password}"
 
-        print(full_ip)
         return full_ip, rcon
     return None, "No API response."
 
