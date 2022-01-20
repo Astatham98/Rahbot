@@ -73,15 +73,19 @@ class OrganiserBotHandle:
     async def get_teams(self, embed):
         red = [self.parse_mention(x.strip()) for x in embed.fields[0].value.split('\u200b')][1:]
         blue = [self.parse_mention(x.strip()) for x in embed.fields[1].value.split('\u200b')][1:]
-        settings.CURRENT_GAME = {'Red': red, 'Blue': blue}
-        print(settings.CURRENT_GAME)
+        ID = self.get_game_id(embed)
+
+        [self.db.games(player, ID, 'red') for player in red]
+        [self.db.games(player, ID, 'blue') for player in blue]
+
+        #settings.CURRENT_GAME = {'Red': red, 'Blue': blue}
+        #print(settings.CURRENT_GAME)
         
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         if re.match(r"〈[A-Z]〉", mention):
             print(mention)
             mention = re.split(r"〈[A-Z]〉", mention)[1:].strip()
-            print(mention)
 
         id = mention.replace('>', '')
         id = id.replace('<@', '')

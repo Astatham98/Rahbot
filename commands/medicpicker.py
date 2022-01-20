@@ -7,7 +7,7 @@ import time
 
 class MedicPicker(BaseCommand):
     def __init__(self):
-        description = "Picks a medic"
+        description = "Picks a from your most recent game or mention yourself after to gain immunity."
         params = None
         self.db = Database()
         super().__init__(description, params)
@@ -20,16 +20,14 @@ class MedicPicker(BaseCommand):
             chosen_player = await client.fetch_user(int(id))
             await message.channel.send(f'{chosen_player.name} has been given immunity.')
         else:
-            team = self.find_team(message)
+            team = [x[0] for x in self.db.find_teammates(str(message.author.id))]
             if team is not None:
-                eligible = []
-                for player in team:
-                    if self.db.immune(player) is False:
-                        eligible.append(player)
-                
-                chosen_player_id = random.choice(eligible)
+                chosen_player_id = random.choice(team)
                 chosen_player = await client.fetch_user(int(chosen_player_id))
-                
+
+                users = [await client.fetch_user(int(x)) for x in team]
+                await message.channel.send(f'Choosing a medic from: {", ".join([x.name for x in users])}')
+
                 time.sleep(2)
                 await message.channel.send(f"{chosen_player.name} has been selected to play medic.")
                 self.db.set_immune(chosen_player_id)

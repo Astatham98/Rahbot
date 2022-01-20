@@ -63,15 +63,43 @@ class Database:
         return None
     
     def set_immune(self, member_id):
-        self.cur.execute('UPDATE leaderboard SET immunity = true WHERE id = %s', [member_id])
+        self.cur.execute('UPDATE games SET immunity = true WHERE id = %s', [member_id])
         self.conn.commit()
 
     def reset_immunity(self):
-        self.cur.execute('UPDATE leaderboard SET immunity = false WHERE immunity = true')
+        self.cur.execute('UPDATE games SET immunity = false WHERE immunity = true')
+        self.conn.commit()
+
+    def find_teammates(self, id):
+        self.cur.execute('SELECT gameID from games WHERE id = %s', [id])
+        gameid = self.cur.fetchone()
+
+        self.cur.execute(
+            'SELECT id FROM games g WHERE g.gameID = %s and g.immunity = %s', (gameid, False)
+        )
+        return self.cur.fetchall()
+    
+    def games(self, member_id, game_id, team):
+        self.cur.execute(
+            'SELECT immunity FROM games g WHERE g.id = %s', [member_id]
+        )
+        immunity = self.cur.fetchone()
+
+        if immunity is not None:
+            self.cur.execute('UPDATE games SET gameID = %s, team = %s', (game_id, team))
+
+        else:
+            self.cur.execute(
+                'INSERT INTO games (id,gameID,team,immunity) \
+                             VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING',
+                (member_id, game_id, team, False)
+            )
+
         self.conn.commit()
 
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
         return id.split('!')[-1]
+
         
