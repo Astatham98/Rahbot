@@ -87,7 +87,7 @@ class Database:
         immunity = self.cur.fetchone()
 
         if immunity is not None:
-            self.cur.execute('UPDATE games SET gameID = %s, team = %s', (game_id, team))
+            self.cur.execute('UPDATE games SET gameID = %s, team = %s WHERE id = %s', (game_id, team, member_id))
 
         else:
             self.cur.execute(
