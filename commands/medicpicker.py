@@ -25,6 +25,10 @@ class MedicPicker(BaseCommand):
                 chosen_player_id = random.choice(team)
                 chosen_player = await client.fetch_user(int(chosen_player_id))
 
+                users = [await client.fetch_user(int(x)) for x in team if x is not '']
+                await message.channel.send(f'Choosing a medic from: {", ".join([x.name for x in users])}')
+
+                time.sleep(2)
                 await message.channel.send(f"{chosen_player.name} has been selected to play medic.")
                 self.db.set_immune(chosen_player_id)
             else:
