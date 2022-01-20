@@ -71,11 +71,12 @@ class Database:
         self.conn.commit()
 
     def find_teammates(self, id):
-        self.cur.execute('SELECT gameID from games WHERE id = %s', [id])
-        gameid = self.cur.fetchone()
+        self.cur.execute('SELECT gameID, team from games WHERE id = %s', [id])
+        output = self.cur.fetchone()
+        gameid, team = output[0], output[1]
 
         self.cur.execute(
-            'SELECT id FROM games g WHERE g.gameID = %s and g.immunity = %s', (gameid, False)
+            'SELECT id FROM games g WHERE g.gameID = %s and g.immunity = %s and team = %s', (gameid, False, team)
         )
         return self.cur.fetchall()
     
