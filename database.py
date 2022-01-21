@@ -67,7 +67,7 @@ class Database:
         self.conn.commit()
 
     def reset_immunity(self):
-        self.cur.execute('UPDATE games SET immunity = false WHERE immunity = true')
+        self.cur.execute('UPDATE games SET immunity = False WHERE immunity = True')
         self.conn.commit()
 
     def find_teammates(self, id):
