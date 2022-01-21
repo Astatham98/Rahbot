@@ -62,7 +62,7 @@ def get_map(map):
             "sunshine": "cp_sunshine",
             "snakewater": "cp_snakewater_final1",
             "metalworks": "cp_metalworks_f2",
-            "gullywash": "cp_gullywash_f5",
+            "gullywash": "cp_gullywash_f6",
             "reckoner": "cp_reckoner_rc6",
             "clearcut": "koth_clearcut_b15d", 
             "granary": "cp_granary_pro_rc8"}
