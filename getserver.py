@@ -67,8 +67,8 @@ def get_map(map):
     return maps.get(map.lower(), None)
 
 def get_config(map):
-    maps_configs = {"cp": 24,
-                    "koth": 4,
+    maps_configs = {"cp": 4,
+                    "koth": 24,
                     "ctf": 12,
                     "ultiduo": 11        
                     }
