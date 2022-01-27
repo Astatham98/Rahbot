@@ -13,16 +13,12 @@ def get_key():
 def get_rcon():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-
-
 def get_server(map):
     api_key = get_key()
-    print(api_key, type(api_key))
     map_name = get_map(map)
     if map_name is None: return None, None
 
     response = requests.get('https://direct.serveme.tf/api/reservations/new?api_key={}'.format(api_key), verify=False)
-    print(response.status_code)
     if response.status_code == 200:
         json_response = response.json()
 
@@ -39,10 +35,9 @@ def get_server(map):
         time_slot["rcon"] = get_rcon()
         time_slot["password"] = "rahmix"
         time_slot["server_id"] = int(server)
-        time_slot["server_config_id"] = 4 if "koth" not in map_name else 24
+        time_slot["server_config_id"] = get_config(map_name)
         time_slot["first_map"] = map_name
         time_slot["enable_plugins"] = True
-
 
         response = requests.post(url=url, json=time_slot, verify=False).json()
 
@@ -65,5 +60,17 @@ def get_map(map):
             "gullywash": "cp_gullywash_f6",
             "reckoner": "cp_reckoner_rc6",
             "clearcut": "koth_clearcut_b15d", 
-            "granary": "cp_granary_pro_rc8"}
+            "granary": "cp_granary_pro_rc8",
+            "prolands": "cp_prolands_rc2p", 
+            "bball": "ctf_ballin_skyfall",
+            "ultiduo": "ultiduo_baloo_v2"}
     return maps.get(map.lower(), None)
+
+def get_config(map):
+    maps_configs = {"cp": 24,
+                    "koth": 4,
+                    "ctf": 12,
+                    "ultiduo": 11        
+                    }
+
+    return maps_configs.get(map.split("_")[0])
