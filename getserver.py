@@ -61,7 +61,7 @@ def get_map(map):
             "reckoner": "cp_reckoner_rc6",
             "clearcut": "koth_clearcut_b15d", 
             "granary": "cp_granary_pro_rc8",
-            "prolands": "cp_prolands_rc2p", 
+            "prolands": "cp_prolands_rc2ta", 
             "bball": "ctf_ballin_skyfall",
             "ultiduo": "ultiduo_baloo_v2"}
     return maps.get(map.lower(), None)
