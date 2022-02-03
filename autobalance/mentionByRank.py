@@ -9,6 +9,7 @@ def return_ranks_embed(members):
     region_dict = {}
     # for each members add to a dictionary with {member: div} and {member: skill{
     for member in members:
+        print(member)
         roles = member.roles
         div, region = getRanks.get_region_roles(roles)  # Gets the users text div
         skill = getRanks.get_skill(div, region)  # gets the users skill number
