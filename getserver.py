@@ -56,8 +56,8 @@ def get_map(map):
     maps = {"process": "cp_process_f9a", 
             "sunshine": "cp_sunshine",
             "snakewater": "cp_snakewater_final1",
-            "metalworks": "cp_metalworks_f2",
-            "gullywash": "cp_gullywash_f6",
+            "metalworks": "cp_metalworks_f3",
+            "gullywash": "cp_gullywash_f7",
             "reckoner": "cp_reckoner_rc6",
             "clearcut": "koth_clearcut_b15d", 
             "granary": "cp_granary_pro_rc8",
@@ -74,3 +74,4 @@ def get_config(map):
                     }
 
     return maps_configs.get(map.split("_")[0])
+
