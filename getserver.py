@@ -63,7 +63,8 @@ def get_map(map):
             "granary": "cp_granary_pro_rc8",
             "prolands": "cp_prolands_rc2ta", 
             "bball": "ctf_ballin_skyfall",
-            "ultiduo": "ultiduo_baloo_v2"}
+            "ultiduo": "ultiduo_baloo_v2",
+            "subbase": "cp_subbase_a21a"}
     return maps.get(map.lower(), None)
 
 def get_config(map):
