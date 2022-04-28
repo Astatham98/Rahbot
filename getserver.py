@@ -27,7 +27,8 @@ def get_server(map):
 
         response = requests.post(url=url, data=time_slot, verify=False).json()
         servers = response["servers"]
-        possible_servers = [x for x in servers if x["flag"] == "fr"]
+        possible_servers = [x for x in servers if x["flag"] == "de" and 'Anti-DDoS' in x['name']]
+        possible_servers = possible_servers if len(possible_servers) > 0 else [x for x in servers if x['flag'] == "fr"]
         server = possible_servers[0]["id"]
 
         url = response["actions"]["create"] + "?api_key={}".format(api_key)
@@ -75,4 +76,3 @@ def get_config(map):
                     }
 
     return maps_configs.get(map.split("_")[0])
-
