@@ -5,12 +5,16 @@ from getserver import get_server
 class Getserver(BaseCommand):
     def __init__(self):
         description = "Gets a french server with whatever map you want."
-        params = ["map"]
+        params = ["map", "location"]
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
         map_choice = params[0]
-        server, rcon = get_server(map_choice)
+        server_loc = None
+        if len(params) > 1: 
+            if params[1].lower() in ("de", "fr", "nl"): 
+                server_loc = params[1]
+        server, rcon = get_server(map_choice, server_loc)
         if server is None: 
             if rcon is None:
                 await message.channel.send('Please enter a valid map name')

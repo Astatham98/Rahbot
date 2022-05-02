@@ -13,7 +13,8 @@ def get_key():
 def get_rcon():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
-def get_server(map):
+def get_server(map, loc):
+    loc = "fr" if loc is None else loc
     api_key = get_key()
     map_name = get_map(map)
     if map_name is None: return None, None
@@ -27,8 +28,8 @@ def get_server(map):
 
         response = requests.post(url=url, data=time_slot, verify=False).json()
         servers = response["servers"]
-        possible_servers = [x for x in servers if x["flag"] == "de" and 'Anti-DDoS' in x['name']]
-        possible_servers = possible_servers if len(possible_servers) > 0 else [x for x in servers if x['flag'] == "fr"]
+        possible_servers = [x for x in servers if x["flag"] == loc and 'Anti-DDoS' in x['name']]
+        possible_servers = possible_servers if len(possible_servers) > 0 else [x for x in servers if x['flag'] == loc]
         server = possible_servers[0]["id"]
 
         url = response["actions"]["create"] + "?api_key={}".format(api_key)
