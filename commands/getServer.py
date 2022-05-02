@@ -5,7 +5,7 @@ from getserver import get_server
 class Getserver(BaseCommand):
     def __init__(self):
         description = "Gets a french server with whatever map you want."
-        params = ["map", "location"]
+        params = ["map"]
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
