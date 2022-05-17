@@ -44,6 +44,8 @@ class Div(BaseCommand):
             return ['ugc']
         elif 'fbtf' in link:
             return SA().get_div(link)
+        elif 'casual' in link:
+            return ['casual']
 
     # Sends a welcome message to the channel
     async def welcome_message_embed(self, message):
@@ -55,6 +57,7 @@ class Div(BaseCommand):
         embed.add_field(name="OzFort", value=";div https://ozfortress.com/users/2533", inline=False)
         embed.add_field(name="Asia", value=";div https://match.tf/users/5640", inline=False)
         embed.add_field(name="SA", value=";div https://fbtf.tf/users/788", inline=False)
+        embed.add_field(name="Casual", value=";div casual", inline=False)
         embed.set_footer(text="If you get the incorrect rank or the bot misses a rank, contact Rahmed.")
         await message.channel.send(embed=embed)
 
