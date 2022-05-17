@@ -10,10 +10,12 @@ class Getserver(BaseCommand):
 
     async def handle(self, params, message, client):
         map_choice = params[0]
-        server_loc = None
+        server_loc = message.channel.name.split('-')[0]
         if len(params) > 1: 
             if params[1].lower() in ("de", "fr", "nl"): 
-                server_loc = params[1]
+                server_loc += " " + params[1]
+            elif params[1].lower() in ("chi", "ks", "la"):
+                server_loc += " " + params[1]
         server, rcon = get_server(map_choice, server_loc)
         if server is None: 
             if rcon is None:

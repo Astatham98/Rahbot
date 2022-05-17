@@ -14,12 +14,20 @@ def get_rcon():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
 
 def get_server(map, loc):
-    loc = "fr" if loc is None else loc
+    new_loc = None
+    if loc == "eu":
+        new_loc = "fr"
+    elif loc == "na":
+        new_loc = "chi"
+    else:
+        new_loc = loc.split()[1]
+     
     api_key = get_key()
     map_name = get_map(map)
     if map_name is None: return None, None
 
-    response = requests.get('https://direct.serveme.tf/api/reservations/new?api_key={}'.format(api_key), verify=False)
+    prefix = "" if "eu" in loc else "na."
+    response = requests.get('https://direct.{}serveme.tf/api/reservations/new?api_key={}'.format(prefix, api_key), verify=False)
     if response.status_code == 200:
         json_response = response.json()
 
@@ -28,9 +36,11 @@ def get_server(map, loc):
 
         response = requests.post(url=url, data=time_slot, verify=False).json()
         servers = response["servers"]
-        possible_servers = [x for x in servers if x["flag"] == loc and 'Anti-DDoS' in x['name']]
-        possible_servers = possible_servers if len(possible_servers) > 0 else [x for x in servers if x['flag'] == loc]
-        server = possible_servers[0]["id"]
+        if prefix == "":
+            server = get_eu_server(servers, new_loc)
+        else:
+            server = get_na_server(servers, new_loc)
+        
 
         url = response["actions"]["create"] + "?api_key={}".format(api_key)
         
@@ -41,14 +51,14 @@ def get_server(map, loc):
         time_slot["first_map"] = map_name
         time_slot["enable_plugins"] = True
 
-        response = requests.post(url=url, json=time_slot, verify=False).json()
+        #response = requests.post(url=url, json=time_slot, verify=False).json()
 
         server_info = response["reservation"]["server"]
         ip_and_port = server_info["ip_and_port"]
         password = response["reservation"]["password"]
         rcon = response["reservation"]["rcon"]
 
-        full_ip = "connect " + ip_and_port + f"; password {password}"
+        full_ip = f'connect {ip_and_port}; password "{password}"'
 
         return full_ip, rcon
     return None, "No API response."
@@ -77,3 +87,20 @@ def get_config(map):
                     }
 
     return maps_configs.get(map.split("_")[0])
+
+def get_eu_server(servers, loc):
+    possible_servers = [x for x in servers if x["flag"] == loc and 'Anti-DDoS' in x['name']]
+    possible_servers = possible_servers if len(possible_servers) > 0 else [x for x in servers if x['flag'] == loc]
+    return possible_servers[0]["id"]
+
+def get_na_server(servers, loc):
+    ip_region = {"chi": "nfo-chicago",
+                 "ks": "ks",
+                 "la": "la"}
+    loc = ip_region.get(loc, loc)
+    return [x for x in servers if x["ip"].lower().startswith(loc)][0]["id"]
+    
+
+
+if __name__ == "__main__":
+    get_server("process", None)
