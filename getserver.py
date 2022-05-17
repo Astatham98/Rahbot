@@ -51,7 +51,7 @@ def get_server(map, loc):
         time_slot["first_map"] = map_name
         time_slot["enable_plugins"] = True
 
-        #response = requests.post(url=url, json=time_slot, verify=False).json()
+        response = requests.post(url=url, json=time_slot, verify=False).json()
 
         server_info = response["reservation"]["server"]
         ip_and_port = server_info["ip_and_port"]
@@ -100,7 +100,3 @@ def get_na_server(servers, loc):
     loc = ip_region.get(loc, loc)
     return [x for x in servers if x["ip"].lower().startswith(loc)][0]["id"]
     
-
-
-if __name__ == "__main__":
-    get_server("process", None)
