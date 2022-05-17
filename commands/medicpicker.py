@@ -21,15 +21,15 @@ class MedicPicker(BaseCommand):
             await message.channel.send(f'{chosen_player.name} has been given immunity.')
         else:
             team = [x[0] for x in self.db.find_teammates(str(message.author.id))]
-            if team is not None:
+            if len(team) > 0:
                 chosen_player_id = random.choice(team)
                 chosen_player = await client.fetch_user(int(chosen_player_id))
 
                 users = [await client.fetch_user(int(x)) for x in team if x is not '']
-                await message.channel.send(f'Choosing a medic from: {", ".join([x.name for x in users])}')
+                await message.channel.send(f'Choosing a medic from: {", ".join([x.nick if x.nick else x.name for x in users])}')
 
-                time.sleep(2)
-                await message.channel.send(f"{chosen_player.name} has been selected to play medic.")
+                time.sleep(0.5)
+                await message.channel.send(f"{chosen_player.nick if chosen_player.nick else chosen_player.name} has been selected to play medic.")
                 self.db.set_immune(chosen_player_id)
             else:
                 await message.channel.send('Unable to find the corresponding team.')
