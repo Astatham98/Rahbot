@@ -39,7 +39,7 @@ class RGL():
                     div_table.append(table)
                     break
 
-        if not div_table: return ["RGL - Newcomer 6's", "RGL - Newcomer highlander"]
+        if not div_table: return ["RGL - Newcomer 6s", "RGL - Newcomer highlander"]
 
         
         best_divs = []
@@ -51,7 +51,7 @@ class RGL():
                     best_div = current_div
             best_divs.append(best_div)
         
-        for i, gamemode in enumerate([" highlander", " 6's"]):
+        for i, gamemode in enumerate([" highlander", " 6s"]):
             best_divs[i] = f"RGL - {best_divs[i]}{gamemode}" 
 
         print(best_divs)
