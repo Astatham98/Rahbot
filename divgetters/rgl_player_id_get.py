@@ -51,8 +51,12 @@ class RGL():
                     best_div = current_div
             best_divs.append(best_div)
         
+        full_divs = []
         for i, gamemode in enumerate([" highlander", " 6s"]):
-            best_divs[i] = f"RGL - {best_divs[i]}{gamemode}" 
+            if i+1 > len(best_divs):
+                full_divs.append(f"RGL - {best_divs[0]}{gamemode}")
+            else:
+                full_divs.append(f"RGL - {best_divs[i]}{gamemode}")
 
-        print(best_divs)
-        return best_divs
+        print(full_divs)
+        return full_divs
