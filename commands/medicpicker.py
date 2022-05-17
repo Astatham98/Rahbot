@@ -13,19 +13,20 @@ class MedicPicker(BaseCommand):
         super().__init__(description, params)
 
     async def handle(self, params, message, client):
+        guild = message.guild
         if len(params) > 0:
             id = self.parse_mention(params[0])
             self.db.set_immune(id)
 
-            chosen_player = await client.fetch_user(int(id))
-            await message.channel.send(f'{chosen_player.name} has been given immunity.')
+            chosen_player = guild.get_member(int(id))
+            await message.channel.send(f'{chosen_player.nick if chosen_player.nick else chosen_player.name} has been given immunity.')
         else:
             team = [x[0] for x in self.db.find_teammates(str(message.author.id))]
             if len(team) > 0:
                 chosen_player_id = random.choice(team)
-                chosen_player = await client.fetch_user(int(chosen_player_id))
+                chosen_player = guild.get_member(int(chosen_player_id))
 
-                users = [await client.fetch_user(int(x)) for x in team if x is not '']
+                users = [guild.get_member(int(chosen_player_id)) for x in team if x is not '']
                 await message.channel.send(f'Choosing a medic from: {", ".join([x.nick if x.nick else x.name for x in users])}')
 
                 time.sleep(0.5)
@@ -51,4 +52,5 @@ class MedicPicker(BaseCommand):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
         id = id.replace('<@!', '')
-        return id
+        return id.replace('<@', '')
+        
