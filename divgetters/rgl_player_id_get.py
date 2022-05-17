@@ -18,7 +18,8 @@ class RGL():
         "Newcomer": 6 
         }
 
-        doc = requests.get(link).text
+        req = requests.Session()
+        doc = req.get(link).text
         soup = BeautifulSoup(doc, 'lxml')
 
         div_table = []
@@ -41,7 +42,7 @@ class RGL():
                     best_div = current_div
             best_divs.append(best_div)
         
-        for i, gamemode in enumerate([" 6's", " highlander"]):
+        for i, gamemode in enumerate([" highlander", " 6's"]):
             best_divs[i] = f"RGL - {best_divs[i]}{gamemode}" 
 
         print(best_divs)
