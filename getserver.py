@@ -47,7 +47,7 @@ def get_server(map, loc):
         time_slot["rcon"] = get_rcon()
         time_slot["password"] = "rahmix"
         time_slot["server_id"] = int(server)
-        time_slot["server_config_id"] = get_config(map_name)
+        time_slot["server_config_id"] = get_config(loc.split()[0],map_name)
         time_slot["first_map"] = map_name
         time_slot["enable_plugins"] = True
 
@@ -79,14 +79,20 @@ def get_map(map):
             "subbase": "cp_subbase_a22"}
     return maps.get(map.lower(), None)
 
-def get_config(map):
-    maps_configs = {"cp": 142, #Previously 4
+def get_config(region, map):
+    maps_configs = {'eu' : {"cp": 142, #Previously 4
                     "koth": 24,
                     "ctf": 12,
                     "ultiduo": 11        
-                    }
-
-    return maps_configs.get(map.split("_")[0])
+                    },
+                    'na': {
+                    "cp": 105,
+                    "koth": 106,
+                    "ctf": 12,
+                    "ultiduo": 11   
+                    }}
+    region_dict = maps_configs.get(region.lower(), {})
+    return region_dict.get(map.split("_")[0])
 
 def get_eu_server(servers, loc):
     possible_servers = [x for x in servers if x["flag"] == loc and 'Anti-DDoS' in x['name']]
@@ -99,4 +105,3 @@ def get_na_server(servers, loc):
                  "la": "la"}
     loc = ip_region.get(loc, loc)
     return [x for x in servers if x["ip"].lower().startswith(loc)][0]["id"]
-    

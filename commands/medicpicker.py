@@ -26,7 +26,7 @@ class MedicPicker(BaseCommand):
                 chosen_player_id = random.choice(team)
                 chosen_player = guild.get_member(int(chosen_player_id))
 
-                users = [guild.get_member(int(chosen_player_id)) for x in team if x is not '']
+                users = [guild.get_member(int(x)) for x in team if x is not '']
                 await message.channel.send(f'Choosing a medic from: {", ".join([x.nick if x.nick else x.name for x in users])}')
 
                 time.sleep(0.5)
