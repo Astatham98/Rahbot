@@ -8,7 +8,7 @@ from divgetters.sa_player_id_get import SA
 from time import sleep
 from divgetters.rgl_player_id_get import RGL
 import discord
-
+import settings
 
 class Div(BaseCommand):
 
@@ -23,6 +23,7 @@ class Div(BaseCommand):
         super().__init__(description, params)
 
     async def handle(self, params, msg, client):
+       
         divs = self.get_region(params[0])
         roles = msg.guild.roles # Gets the guilds roles
 
