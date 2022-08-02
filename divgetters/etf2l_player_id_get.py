@@ -10,6 +10,7 @@ class Etf2l():
         gamemodes = ['6on6','Highlander']
 
         response  = requests.get('https://api.etf2l.org/player/{}/results.json?per_page=100&since=0'.format(id))
+        print(response)
         
         divs = []
         for gamemode in gamemodes:

@@ -67,7 +67,7 @@ def get_map(map):
 
     maps = {"process": "cp_process_f9a", 
             "sunshine": "cp_sunshine",
-            "snakewater": "cp_snakewater_final1",
+            "snakewater": "cp_snakewater_u50",
             "metalworks": "cp_metalworks_f3",
             "gullywash": "cp_gullywash_f7",
             "reckoner": "cp_reckoner_rc6",
@@ -76,7 +76,8 @@ def get_map(map):
             "prolands": "cp_prolands_rc2ta", 
             "bball": "ctf_ballin_skyfall",
             "ultiduo": "ultiduo_baloo_v2",
-            "subbase": "cp_subbase_a22"}
+            "subbase": "cp_subbase_a22",
+            "product": "koth_product_final"}
     return maps.get(map.lower(), None)
 
 def get_config(region, map):
