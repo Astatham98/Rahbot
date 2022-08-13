@@ -45,7 +45,7 @@ def get_server(map, loc):
         url = response["actions"]["create"] + "?api_key={}".format(api_key)
         
         time_slot["rcon"] = get_rcon()
-        time_slot["password"] = "rahmix"
+        time_slot["password"] = "rahmix" + str(random.randint(1, 1000))
         time_slot["server_id"] = int(server)
         time_slot["server_config_id"] = get_config(loc.split()[0],map_name)
         time_slot["first_map"] = map_name
