@@ -77,7 +77,8 @@ def get_map(map):
             "bball": "ctf_ballin_skyfall",
             "ultiduo": "ultiduo_baloo_v2",
             "subbase": "cp_subbase_a22",
-            "product": "koth_product_final"}
+            "product": "koth_product_final",
+            "bagel": "koth_bagel_rc5s"}
     return maps.get(map.lower(), None)
 
 def get_config(region, map):
