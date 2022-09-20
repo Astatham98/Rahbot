@@ -49,8 +49,6 @@ class OrganiserBotHandle:
     # Find the members in the discord and mentions them in some form
     async def find_members(self, guild, embed):
         names = self.get_member_names(self.embed)
-        print(names)
-
         members = []
         # Fetch all the guild members
         async for member in guild.fetch_members():
@@ -85,7 +83,6 @@ class OrganiserBotHandle:
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         if re.match(r"`〈[A-Z]〉`", mention):
-            print(mention)
             mention = re.split(r"`〈[A-Z]〉`", mention)[1].strip()
 
         id = mention.replace('>', '')
