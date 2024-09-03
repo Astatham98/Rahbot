@@ -1,1 +1,1 @@
-worker: python3 rahbot.py
+web: python3 rahbot.py
