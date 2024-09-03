@@ -8,7 +8,8 @@ import random
 def get_key():
     config = configparser.ConfigParser()
     config.read('config.ini')
-    return os.environ.get('SERVERME_KEY') if os.environ.get('SERVERME_KEY') is not None else config.get('KEYS', 'SERVERME_KEY')
+    #return os.environ.get('SERVERME_KEY') if os.environ.get('SERVERME_KEY') is not None else config.get('KEYS', 'SERVERME_KEY')
+    return os.environ.get('SERVERME_KEY')
 
 def get_rcon():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
