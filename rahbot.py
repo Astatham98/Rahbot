@@ -60,6 +60,7 @@ def main():
         text = message.content
         if text.startswith(settings.COMMAND_PREFIX) and text != settings.COMMAND_PREFIX:
             cmd_split = text[len(settings.COMMAND_PREFIX):].split()
+            print(cmd_split)
             try:
                 await message_handler.handle_command(cmd_split[0].lower(),
                                                      cmd_split[1:], message, client)

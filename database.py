@@ -1,15 +1,21 @@
 import os
-import psycopg2
 import configparser
-
+import psycopg2
 
 class Database:
     def __init__(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        DATABASE_URL = os.environ.get('DATABASE_URL') if os.environ.get('DATABASE_URL') is not None else config.get(
-            'KEYS', 'DATABASE')
-        self.conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+        DATABASE_HOST = os.environ.get('DATABASE_HOST') if os.environ.get('DATABASE_HOST') is not None else config.get(
+            'DATABASE', 'DATABASE_HOST')
+        DATABASE_USER = os.environ.get('DATABASE_USER') if os.environ.get('DATABASE_USER') is not None else config.get(
+            'DATABASE', 'DATABASE_USER')
+        DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD') if os.environ.get('DATABASE_PASSWORD') is not None else config.get(
+            'DATABASE', 'DATABASE_PASSWORD')
+        DATABASE_NAME = os.environ.get('DATABASE_NAME') if os.environ.get('DATABASE_NAME') is not None else config.get(
+            'DATABASE', 'DATABASE_NAME')
+        
+        self.conn = psycopg2.connect(dbname=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST)
         self.cur = self.conn.cursor()
 
     def insert_into_leaderboard(self, member):

@@ -8,7 +8,7 @@ import random
 def get_key():
     config = configparser.ConfigParser()
     config.read('config.ini')
-    return os.environ.get('SERVERME_KEY') if os.environ.get('SERVERME_KEY') is not None else config.get('KEYS', 'servermekey')
+    return os.environ.get('SERVERME_KEY') if os.environ.get('SERVERME_KEY') is not None else config.get('KEYS', 'SERVERME_KEY')
 
 def get_rcon():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
@@ -65,20 +65,21 @@ def get_server(map, loc):
 
 def get_map(map):
 
-    maps = {"process": "cp_process_f9a", 
+    maps = {"process": "cp_process_f12", 
             "sunshine": "cp_sunshine",
-            "snakewater": "cp_snakewater_u50",
-            "metalworks": "cp_metalworks_f3",
-            "gullywash": "cp_gullywash_f7",
+            "snakewater": "cp_snakewater_final1",
+            "metalworks": "cp_metalworks_f5",
+            "gullywash": "cp_gullywash_f9",
             "reckoner": "cp_reckoner_rc6",
             "clearcut": "koth_clearcut_b15d", 
-            "granary": "cp_granary_pro_rc8",
+            "granary": "cp_granary_pro_rc16f",
             "prolands": "cp_prolands_rc2ta", 
             "bball": "ctf_ballin_skyfall",
             "ultiduo": "ultiduo_baloo_v2",
-            "subbase": "cp_subbase_a22",
+            "subbase": "cp_subbase_b2",
             "product": "koth_product_final",
-            "bagel": "koth_bagel_rc5s"}
+            "bagel": "koth_bagel_rc10",
+            "sultry": "cp_sultry_b8a"}
     return maps.get(map.lower(), None)
 
 def get_config(region, map):
