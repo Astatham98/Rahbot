@@ -14,7 +14,7 @@ class Getserver(BaseCommand):
         if channel_region in ('eu', 'na'):
             server_loc = channel_region
         else:
-            server_loc = eu
+            server_loc = 'eu'
             
         if len(params) > 1: 
             if params[1].lower() in ("de", "fr", "nl"): 
