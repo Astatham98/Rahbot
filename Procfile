@@ -1,1 +1,1 @@
-python3 rahbot.py
+python rahbot.py
