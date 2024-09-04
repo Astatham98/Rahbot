@@ -28,4 +28,4 @@ urllib3==2.2.2
 yarl==1.9.7
 Flask==1.1.2
 gunicorn==20.1.0
-werkzeug==2.0.2
+werkzeug==3.0.3
