@@ -1,1 +1,1 @@
-web: python3 rahbot.py
+gunicorn app:app & python3 rahbot.py
