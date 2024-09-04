@@ -9,8 +9,7 @@ config.read('config.ini')
 COMMAND_PREFIX = ";"
 
 # The bot token. Keep this secret!
-BOT_TOKEN = os.environ.get('RAHBOT_KEY')
-#BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'RAHBOT_KEY')
+BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'RAHBOT_KEY')
 
 
 print(BOT_TOKEN)

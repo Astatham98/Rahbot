@@ -47,6 +47,8 @@ class Div(BaseCommand):
             return SA().get_div(link)
         elif 'casual' in link:
             return ['casual']
+        else:
+            return ['None']
 
     # Sends a welcome message to the channel
     async def welcome_message_embed(self, message):
@@ -83,7 +85,14 @@ You've been given newcomer at the moment so you can explore the server while you
     # Give the user their role
     async def give_role(self, msg, roles, divs):
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0] # Gets the newb role for removal later
-        [await msg.author.remove_roles(x) for x in msg.author.roles if divs[0].split(' ')[0].lower() in x.name.lower()]
+        
+        # Remove current divs from the region
+        for x in msg.author.roles:
+            if len(divs[0].split(' ')) > 1:
+                if divs[0].split(' ')[0].lower() in x.name.lower():
+                    await msg.author.remove_roles(x)
+        
+        
         for div in divs:
             for role in roles:
                 if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''): # parse the roles to make it easily searchableç        
@@ -93,6 +102,7 @@ You've been given newcomer at the moment so you can explore the server while you
                     print('role given')
                     break
                 # If the div is ugc then send a specific message
-                elif div == 'ugc':
-                    await msg.channel.send('We currently do not accept UGC profiles, please try another profile type.')
+                else:
+                    await msg.channel.send('This is not a valid role type, please try again')
+                    sleep(5)
                     break
