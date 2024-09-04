@@ -1,6 +1,7 @@
 import os
 import configparser
 import psycopg2
+from datetime import datetime, timezone
 
 class Database:
     def __init__(self):
@@ -21,12 +22,12 @@ class Database:
     def insert_into_leaderboard(self, member):
         name = member.name
         id = str(member.id)
+        print(id)
 
         self.cur.execute(
             'SELECT played FROM leaderboard l WHERE l.id = %s', [id]
         )
         games_played = self.cur.fetchone()
-        print(games_played, name)
         if games_played:
             new_played = games_played[0] + 1
 
@@ -103,10 +104,38 @@ class Database:
             )
 
         self.conn.commit()
+        
+    def insert_into_users(self, member_id, linkedProfile, steamProfile, verified):
+        dt = datetime.now(timezone.utc)
+        self.cur.execute(
+            'INSERT INTO users (id,linkedProfile,steam,dateRegistered,verified) VALUES (%s, %s, %s, %s, %s)', (member_id, linkedProfile, steamProfile, dt, verified)
+        )
+        
+    def create_leaderboard_table(self):
+        #id name played
+        self.cur.execute(
+            'CREATE TABLE IF NOT EXISTS leaderboard(id VARCHAR(255) PRIMARY KEY,name VARCHAR(255), played INTEGER)'
+        )
+        self.conn.commit()
 
+    def create_games_table(self):
+        self.cur.execute(
+            'CREATE TABLE IF NOT EXISTS games(id VARCHAR(255) PRIMARY KEY, game_id VARCHAR(255), team VARCHAR(4), immunity BOOLEAN)'
+        )
+        self.conn.commit()
+        
+    def create_users_table(self):
+        #id linkedProfile steamProfile dateRegistered Verified
+        self.cur.execute(
+            'CREATE TABLE IF NOT EXISTS users(id VARCHAR(255) PRIMARY KEY, linkedProfile VARCHAR(255), steam VARCHAR(255), dateRegistered TIMESTAMP, verified BOOLEAN)'
+        )
+        self.conn.commit()
+    
     def parse_mention(self, mention: str):
         """turns a mention into an id string"""
         id = mention.replace('>', '')
+        id = id.replace('<@', '')
         return id.split('!')[-1]
 
-        
+    def close(self):
+        self.conn.close()

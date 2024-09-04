@@ -30,5 +30,5 @@ LAST_PLAYED = []
 
 CURRENT_GAME = {}
 
-ADMIN_COMMANDS = ['editrolecolor', 'editrolename', 'mentionmode', 'rundb', 'setup']
+ADMIN_COMMANDS = ['editrolecolor', 'editrolename', 'mentionmode', 'rundb', 'setup', 'setupdb']
 

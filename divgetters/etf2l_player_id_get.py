@@ -4,13 +4,12 @@ from time import sleep
 
 
 class Etf2l():
-      def get_div(self, etf2l, sixes=True):
+    def get_div(self, etf2l, sixes=True):
         split = etf2l.split('/')
         id = split[-2]
-        gamemodes = ['6on6','Highlander']
+        gamemodes = ['Highlander', '6v6']
 
         response  = requests.get('https://api.etf2l.org/player/{}/results.json?per_page=100&since=0'.format(id))
-        print(response)
         
         divs = []
         for gamemode in gamemodes:
@@ -34,8 +33,15 @@ class Etf2l():
                 div = "".join(div.split(" ")[:-1]) if div.split(" ")[-1] == 'Division' else div
 
                 
-                ender = gamemode if gamemode != '6on6' else "6's"
+                ender = gamemode if gamemode != '6v6' else "6's"
                 divs.append('Etf2l - ' + div + ' ' + ender)
         print(divs)
         return divs
-
+    
+    def get_steam(etf2l):
+        response  = requests.get('https://api.etf2l.org/player/{}.json?per_page=100&since=0'.format(id))
+        if response.status_code == 200:
+            json_format = response.json()
+            player = json_format['player']
+            id64 = player['steam']['id64']
+            return id64    

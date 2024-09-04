@@ -8,7 +8,8 @@ from divgetters.sa_player_id_get import SA
 from time import sleep
 from divgetters.rgl_player_id_get import RGL
 import discord
-import settings
+from database import Database
+from psycopg2 import errors
 
 class Div(BaseCommand):
 
@@ -20,14 +21,17 @@ class Div(BaseCommand):
         # If no params are expected, leave this list empty or set it to None
         # argument in the handle() method
         params = ["Player page"]
+        self.db = Database()
         super().__init__(description, params)
 
     async def handle(self, params, msg, client):
-       
-        divs = self.get_region(params[0])
+        link = params[0]
+        divs = self.get_region(link)
         roles = msg.guild.roles # Gets the guilds roles
 
-        
+        steam = await self.get_user_steam(link)
+
+        self.insert_user(str(msg.author.id), link, steam, False)
         await self.give_role(msg, roles, divs)  # Give the user a new role and remove newb role
         await self.purge_and_post(msg)             # Purge the messages in the channel and post a new embed
 
@@ -75,13 +79,6 @@ class Div(BaseCommand):
         await msg.author.add_roles(role)
         await msg.author.remove_roles(newb_role)
 
-    # Sends the user a dm
-    async def send_dm(self, member):
-        channel = await member.create_dm()
-        await channel.send("""Unfortunately RGL does not allow us to get specific divs at the moment.
-To get your requested RGL div, please DM rahmed.
-You've been given newcomer at the moment so you can explore the server while you wait.""")
-
     # Give the user their role
     async def give_role(self, msg, roles, divs):
         newb_role = [x for x in roles if x.name.lower() == 'newb'][0] # Gets the newb role for removal later
@@ -92,7 +89,7 @@ You've been given newcomer at the moment so you can explore the server while you
                 if divs[0].split(' ')[0].lower() in x.name.lower():
                     await msg.author.remove_roles(x)
         
-        
+        success = False
         for div in divs:
             for role in roles:
                 if role.name.lower().replace(' ', '') == div.lower().replace(' ', ''): # parse the roles to make it easily searchableç        
@@ -100,9 +97,24 @@ You've been given newcomer at the moment so you can explore the server while you
                     await self.add_remove_roles(msg, role, newb_role)
                     await msg.channel.send('{} has been given the {} role.'.format(msg.author.mention, div))
                     print('role given')
+                    success = True
                     break
                 # If the div is ugc then send a specific message
-                else:
-                    await msg.channel.send('This is not a valid role type, please try again')
-                    sleep(5)
-                    break
+        if not success:
+            await msg.channel.send('This is not a valid role type, please try again')
+            sleep(5)
+                
+    async def get_user_steam(self, link):
+        if 'etf2l' in link:
+            return Etf2l.get_steam(link)
+        return 'None'
+    
+    def insert_user(self, meber_id, Etf2l_link, steam, verified):
+        try:
+            self.db.insert_into_users(meber_id, Etf2l_link, steam, verified)
+        except errors.UniqueViolation:
+            print('user already exists')
+    
+    #Needs more thought before implementation
+    async def check_user_exists(self, page_link):
+        pass
