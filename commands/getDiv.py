@@ -28,12 +28,24 @@ class Div(BaseCommand):
         link = params[0]
         divs = self.get_region(link)
         roles = msg.guild.roles # Gets the guilds roles
-
-        steam = await self.get_user_steam(link)
-
-        self.insert_user(str(msg.author.id), link, steam, False)
+        
+        exist_and_same, no_users = self.check_user_exists(str(msg.author.id), link)
+        if no_users or exist_and_same:
+            steam = await self.get_user_steam(link)
+            self.insert_user(str(msg.author.id), link, steam, False)
+            banned = self.check_banned(link)
+            
+            divs = ['banned'] if banned else divs
+            
+            await self.give_role(msg, roles, divs)  # Give the user a new role and remove newb role
+            await self.purge_and_post(msg)             # Purge the messages in the channel and post a new embed
+        else:
+            #TODO update this to go into an admin log
+            print('user already exists as another account!')
+            divs = ['banned']
+        
         await self.give_role(msg, roles, divs)  # Give the user a new role and remove newb role
-        await self.purge_and_post(msg)             # Purge the messages in the channel and post a new embed
+        await self.purge_and_post(msg)   
 
     # finds the region and returns its div based on the link adress
     def get_region(self, link):
@@ -116,5 +128,12 @@ class Div(BaseCommand):
             print('user already exists')
     
     #Needs more thought before implementation
-    async def check_user_exists(self, page_link):
-        pass
+    def check_user_exists(self, member_id, link):
+        #Checks if the member registering is trhe
+        return self.db.check_user_exists(member_id, link)
+
+    
+    def check_banned(self, etf2l_link):
+        if 'etf2l' in etf2l_link:
+            return Etf2l.get_banned(etf2l_link)
+        return False

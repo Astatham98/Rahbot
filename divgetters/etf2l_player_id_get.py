@@ -1,6 +1,7 @@
 import requests
 from collections import Counter
 from time import sleep
+import time    
 
 
 class Etf2l():
@@ -39,9 +40,29 @@ class Etf2l():
         return divs
     
     def get_steam(etf2l):
+        split = etf2l.split('/')
+        id = split[-2]
         response  = requests.get('https://api.etf2l.org/player/{}.json?per_page=100&since=0'.format(id))
         if response.status_code == 200:
             json_format = response.json()
             player = json_format['player']
             id64 = player['steam']['id64']
             return id64    
+        
+    def get_banned(etf2l):
+        split = etf2l.split('/')
+        id = split[-2]
+        response  = requests.get('https://api.etf2l.org/player/{}.json?per_page=100&since=0'.format(id))
+        if response.status_code == 200:
+            json_format = response.json()
+            player = json_format['player']
+            bans = player['bans']
+            
+            banned = False
+            if bans != None:
+                for ban in bans:
+                    # if time since ban > current time
+                    if ban['end'] > int(time.time()):
+                        banned = True
+            print(banned)
+            return banned

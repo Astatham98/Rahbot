@@ -110,6 +110,31 @@ class Database:
         self.cur.execute(
             'INSERT INTO users (id,linkedProfile,steam,dateRegistered,verified) VALUES (%s, %s, %s, %s, %s)', (member_id, linkedProfile, steamProfile, dt, verified)
         )
+        self.conn.commit()
+        
+    def check_user_exists(self, member_id, link):
+        #check if the user link exists in the db
+        try:
+            self.cur.execute('SELECT id FROM users WHERE users.linkedProfile = %s', [link])
+        except Exception as e:
+            print(f'Error {e}')
+            print('Anything else that you feel is useful')
+            self.conn.rollback()
+        used_id = self.cur.fetchone()
+        no_user_with_linkedProfile = used_id == None
+        if not no_user_with_linkedProfile:
+            used_id = used_id[0]
+        exist_and_same = used_id == member_id
+        no_user_with_linkedProfile = used_id == None
+        #if users id exists in db but trying to link with another account
+        self.cur.execute('SELECT id FROM users WHERE users.id = %s', [member_id])
+        in_db = self.cur.fetchone()
+        if in_db is not None:
+            in_db = in_db[0]
+        if not exist_and_same and in_db is not None:
+            no_user_with_linkedProfile = False
+        
+        return exist_and_same, no_user_with_linkedProfile
         
     def create_leaderboard_table(self):
         #id name played
