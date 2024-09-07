@@ -2,23 +2,47 @@ import os
 import configparser
 import psycopg2
 from datetime import datetime, timezone
+from functools import wraps
+
+def pre_post_call(method):
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self._pre_call()
+        try:
+            result = method(self, *args, **kwargs)
+            return result
+        finally:
+            self._post_call()
+    return wrapper
 
 class Database:
     def __init__(self):
         config = configparser.ConfigParser()
         config.read('config.ini')
-        DATABASE_HOST = os.environ.get('DATABASE_HOST') if os.environ.get('DATABASE_HOST') is not None else config.get(
+        self.DATABASE_HOST = os.environ.get('DATABASE_HOST') if os.environ.get('DATABASE_HOST') is not None else config.get(
             'DATABASE', 'DATABASE_HOST')
-        DATABASE_USER = os.environ.get('DATABASE_USER') if os.environ.get('DATABASE_USER') is not None else config.get(
+        self.DATABASE_USER = os.environ.get('DATABASE_USER') if os.environ.get('DATABASE_USER') is not None else config.get(
             'DATABASE', 'DATABASE_USER')
-        DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD') if os.environ.get('DATABASE_PASSWORD') is not None else config.get(
+        self.DATABASE_PASSWORD = os.environ.get('DATABASE_PASSWORD') if os.environ.get('DATABASE_PASSWORD') is not None else config.get(
             'DATABASE', 'DATABASE_PASSWORD')
-        DATABASE_NAME = os.environ.get('DATABASE_NAME') if os.environ.get('DATABASE_NAME') is not None else config.get(
+        self.DATABASE_NAME = os.environ.get('DATABASE_NAME') if os.environ.get('DATABASE_NAME') is not None else config.get(
             'DATABASE', 'DATABASE_NAME')
         
-        self.conn = psycopg2.connect(dbname=DATABASE_NAME, user=DATABASE_USER, password=DATABASE_PASSWORD, host=DATABASE_HOST)
-        self.cur = self.conn.cursor()
+        
+    def _pre_call(self):
+        self.open()
 
+    def _post_call(self):
+        self.close()
+        
+    def close(self):
+        self.conn.close()
+        
+    def open(self):
+        self.conn = psycopg2.connect(dbname=self.DATABASE_NAME, user=self.DATABASE_USER, password=self.DATABASE_PASSWORD, host=self.DATABASE_HOST)
+        self.cur = self.conn.cursor()
+    
+    @pre_post_call
     def insert_into_leaderboard(self, member):
         name = member.name
         id = str(member.id)
@@ -42,6 +66,7 @@ class Database:
 
         self.conn.commit()
 
+    @pre_post_call
     def get_players_and_games_played(self):
         self.cur.execute('SELECT * FROM leaderboard ORDER BY leaderboard.played DESC')
         board = self.cur.fetchall()
@@ -51,7 +76,8 @@ class Database:
             name.append(row[1])
             played.append(row[2])
         return id, name, played
-
+    
+    @pre_post_call
     def modify_player(self, member, amount: int, remove=False):
         id = self.parse_mention(member)
 
@@ -62,6 +88,7 @@ class Database:
 
         self.conn.commit()
     
+    @pre_post_call
     def immune(self, member_id):
         self.cur.execute('SELECT immunity FROM leaderboard l WHERE l.id = %s', [member_id])
         immunity = self.cur.fetchone()
@@ -69,14 +96,17 @@ class Database:
             return immunity[0]
         return None
     
+    @pre_post_call
     def set_immune(self, member_id):
         self.cur.execute('UPDATE games SET immunity = true WHERE id = %s', [member_id])
         self.conn.commit()
 
+    @pre_post_call
     def reset_immunity(self):
         self.cur.execute('UPDATE games SET immunity = False WHERE immunity = True')
         self.conn.commit()
 
+    @pre_post_call
     def find_teammates(self, id):
         self.cur.execute('SELECT gameID, team from games WHERE id = %s', [id])
         output = self.cur.fetchone()
@@ -87,6 +117,7 @@ class Database:
         )
         return self.cur.fetchall()
     
+    @pre_post_call
     def games(self, member_id, game_id, team):
         self.cur.execute(
             'SELECT immunity FROM games g WHERE g.id = %s', [member_id]
@@ -105,6 +136,7 @@ class Database:
 
         self.conn.commit()
         
+    @pre_post_call
     def insert_into_users(self, member_id, linkedProfile, steamProfile, verified):
         dt = datetime.now(timezone.utc)
         self.cur.execute(
@@ -112,13 +144,13 @@ class Database:
         )
         self.conn.commit()
         
+    @pre_post_call
     def check_user_exists(self, member_id, link):
         #check if the user link exists in the db
         try:
             self.cur.execute('SELECT id FROM users WHERE users.linkedProfile = %s', [link])
         except Exception as e:
             print(f'Error {e}')
-            print('Anything else that you feel is useful')
             self.conn.rollback()
         used_id = self.cur.fetchone()
         no_user_with_linkedProfile = used_id == None
@@ -136,6 +168,7 @@ class Database:
         
         return exist_and_same, no_user_with_linkedProfile
         
+    @pre_post_call
     def create_leaderboard_table(self):
         #id name played
         self.cur.execute(
@@ -143,12 +176,13 @@ class Database:
         )
         self.conn.commit()
 
+    @pre_post_call
     def create_games_table(self):
         self.cur.execute(
             'CREATE TABLE IF NOT EXISTS games(id VARCHAR(255) PRIMARY KEY, game_id VARCHAR(255), team VARCHAR(4), immunity BOOLEAN)'
         )
         self.conn.commit()
-        
+    @pre_post_call
     def create_users_table(self):
         #id linkedProfile steamProfile dateRegistered Verified
         self.cur.execute(
@@ -162,5 +196,3 @@ class Database:
         id = id.replace('<@', '')
         return id.split('!')[-1]
 
-    def close(self):
-        self.conn.close()

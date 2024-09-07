@@ -29,3 +29,4 @@ yarl==1.9.7
 Flask==2.2.5
 gunicorn==23.0.0
 werkzeug==3.0.3
+functools
