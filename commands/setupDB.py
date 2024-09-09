@@ -17,12 +17,9 @@ class setupDB(BaseCommand):
 
     def setup_leaderboard(self):
         self.db.create_leaderboard_table()
-        
+
     def setup_games(self):
         self.db.create_games_table()
-    
+
     def setup_users(self):
         self.db.create_users_table()
-    
-
-    

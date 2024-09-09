@@ -7,7 +7,6 @@ from commands.base_command import BaseCommand
 # This is a convenient command that automatically generates a helpful
 # message showing all available commands
 class Commands(BaseCommand):
-
     def __init__(self):
         description = "Displays this help message"
         params = None
@@ -16,11 +15,15 @@ class Commands(BaseCommand):
 
     async def handle(self, params, message, client):
         from message_handler import COMMAND_HANDLERS
+
         msg = ""
 
         # Displays all descriptions, sorted alphabetically by command name
         for cmd in sorted(COMMAND_HANDLERS.items()):
-            if not message.author.guild_permissions.administrator and cmd[0] not in settings.ADMIN_COMMANDS:
+            if (
+                not message.author.guild_permissions.administrator
+                and cmd[0] not in settings.ADMIN_COMMANDS
+            ):
                 msg += "\n" + cmd[1].description
             elif message.author.guild_permissions.administrator:
                 msg += "\n" + cmd[1].description
@@ -31,14 +34,14 @@ class Commands(BaseCommand):
         msg = await message.channel.send(embed=embed)
         await self.add_reactions(msg)
         while True:
-            reaction, user = await client.wait_for('reaction_add', check=self.check)
+            reaction, user = await client.wait_for("reaction_add", check=self.check)
             correct_emoji = await self.remove_reaction(msg, user, reaction)
             if correct_emoji:
                 await self.change_page(msg_pages, msg, reaction, len(msg_pages))
 
     def parsetext(self, text):
-        """Parses text into seperate strings to """
-        splittext = text.split('\n')
+        """Parses text into seperate strings to"""
+        splittext = text.split("\n")
 
         page_content = []
         lines = ""
@@ -47,7 +50,7 @@ class Commands(BaseCommand):
                 page_content.append(lines)
                 lines = line
             else:
-                lines += line + '\n'
+                lines += line + "\n"
         page_content.append(lines)
 
         return page_content
@@ -59,7 +62,10 @@ class Commands(BaseCommand):
         # Removes reactions from the message, if desired emoji return the true
         await msg.remove_reaction(emoji, user)
 
-        if str(emoji) not in (str(utils.get_emoji("arrow_backward")), str(utils.get_emoji("arrow_forward"))):
+        if str(emoji) not in (
+            str(utils.get_emoji("arrow_backward")),
+            str(utils.get_emoji("arrow_forward")),
+        ):
             return False
         return True
 
@@ -68,13 +74,19 @@ class Commands(BaseCommand):
         await msg.add_reaction(utils.get_emoji("arrow_forward"))
 
     async def change_page(self, msgs, msg, reaction, pages):
-        if str(reaction) == str(utils.get_emoji("arrow_forward")) and self.page + 1 <= pages:
+        if (
+            str(reaction) == str(utils.get_emoji("arrow_forward"))
+            and self.page + 1 <= pages
+        ):
             self.page += 1
-        elif str(reaction) == str(utils.get_emoji("arrow_backward")) and self.page - 1 > 0:
+        elif (
+            str(reaction) == str(utils.get_emoji("arrow_backward"))
+            and self.page - 1 > 0
+        ):
             self.page -= 1
-        await msg.edit(embed=self.create_embed(msgs[self.page-1]))
+        await msg.edit(embed=self.create_embed(msgs[self.page - 1]))
 
     def create_embed(self, msg):
-        embed = discord.Embed(title="Commands", color=0xff0055)
+        embed = discord.Embed(title="Commands", color=0xFF0055)
         embed.add_field(name="User Commands", value=msg, inline=True)
         return embed

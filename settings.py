@@ -2,14 +2,18 @@ import os
 import configparser
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read("config.ini")
 
 # The prefix that will be used to parse commands.
 # It doesn't have to be a single character!
 COMMAND_PREFIX = ";"
 
 # The bot token. Keep this secret!
-BOT_TOKEN = os.environ.get('RAHBOT_KEY') if os.environ.get('RAHBOT_KEY') is not None else config.get('KEYS', 'RAHBOT_KEY')
+BOT_TOKEN = (
+    os.environ.get("RAHBOT_KEY")
+    if os.environ.get("RAHBOT_KEY") is not None
+    else config.get("KEYS", "RAHBOT_KEY")
+)
 
 # The now playing game. Set this to anything false-y ("", None) to disable it
 NOW_PLAYING = COMMAND_PREFIX + "commands"
@@ -28,5 +32,12 @@ LAST_PLAYED = []
 
 CURRENT_GAME = {}
 
-ADMIN_COMMANDS = ['editrolecolor', 'editrolename', 'mentionmode', 'rundb', 'setup', 'setupdb', 'warnings']
-
+ADMIN_COMMANDS = [
+    "editrolecolor",
+    "editrolename",
+    "mentionmode",
+    "rundb",
+    "setup",
+    "setupdb",
+    "warnings",
+]

@@ -10,25 +10,29 @@ class Getserver(BaseCommand):
 
     async def handle(self, params, message, client):
         map_choice = params[0]
-        channel_region = message.channel.name.split('-')[0]
-        if channel_region in ('eu', 'na'):
+        channel_region = message.channel.name.split("-")[0]
+        if channel_region in ("eu", "na"):
             server_loc = channel_region
         else:
-            server_loc = 'eu'
-            
-        if len(params) > 1: 
-            if params[1].lower() in ("de", "fr", "nl"): 
+            server_loc = "eu"
+
+        if len(params) > 1:
+            if params[1].lower() in ("de", "fr", "nl"):
                 server_loc += " " + params[1]
             elif params[1].lower() in ("chi", "ks", "la"):
                 server_loc += " " + params[1]
         server, rcon = get_server(map_choice, server_loc)
-        if server is None: 
+        if server is None:
             if rcon is None:
-                await message.channel.send('Please enter a valid map name')
+                await message.channel.send("Please enter a valid map name")
             else:
-                await message.channel.send('ERROR ACCESSING THE API')
+                await message.channel.send("ERROR ACCESSING THE API")
         else:
-            await message.channel.send('Server IP is: \n{}'.format(server))
-        
+            await message.channel.send("Server IP is: \n{}".format(server))
+
             dm_channel = await message.author.create_dm()
-            await dm_channel.send("The rcon string for this server is:\nrcon_address {}; rcon_password {}".format(server.split(" ")[1].replace(";",""), rcon))
+            await dm_channel.send(
+                "The rcon string for this server is:\nrcon_address {}; rcon_password {}".format(
+                    server.split(" ")[1].replace(";", ""), rcon
+                )
+            )

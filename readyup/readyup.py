@@ -16,7 +16,9 @@ class Ready:
         msg = await self.create_message()
         while self.members_list and not self.timeout:
             try:
-                reaction, user = await self.client.wait_for('reaction_add', timeout=180.0, check=self.check)
+                reaction, user = await self.client.wait_for(
+                    "reaction_add", timeout=180.0, check=self.check
+                )
                 correct_emoji = await self.remove_reaction(msg, user, reaction)
                 if correct_emoji and user in self.members_list:
                     self.members_list.remove(user)
@@ -24,9 +26,11 @@ class Ready:
 
             except asyncio.TimeoutError:
                 self.timeout = True
-                await self.message.channel.send(', '.join([x.name for x in self.members_list]) +
-                                                ' did not ready up. Starting a new pug.',
-                                                delete_after=20.0)
+                await self.message.channel.send(
+                    ", ".join([x.name for x in self.members_list])
+                    + " did not ready up. Starting a new pug.",
+                    delete_after=20.0,
+                )
                 await msg.delete()
                 await closeoldstartnew.close_open(self.message, False)
 
@@ -34,16 +38,22 @@ class Ready:
         return not self.timeout
 
     async def create_message(self):
-        val2 = 'Ready up! ' + ' '.join([x.mention for x in self.members_list])
+        val2 = "Ready up! " + " ".join([x.mention for x in self.members_list])
 
-        bot_message = await self.message.channel.send(content=val2, embed=self.create_embed())
+        bot_message = await self.message.channel.send(
+            content=val2, embed=self.create_embed()
+        )
         await bot_message.add_reaction(utils.get_emoji("white_check_mark"))
 
         return bot_message
 
     def create_embed(self):
-        val = '\n'.join([x.name for x in self.members_list]) if self.members_list else "Game Ready!"
-        embed = discord.Embed(title="", color=0x11ff00)
+        val = (
+            "\n".join([x.name for x in self.members_list])
+            if self.members_list
+            else "Game Ready!"
+        )
+        embed = discord.Embed(title="", color=0x11FF00)
         embed.add_field(name="Players", value=val, inline=False)
         return embed
 

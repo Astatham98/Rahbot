@@ -6,7 +6,6 @@ from organiserBotHandle import OrganiserBotHandle
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from events.base_event import BaseEvent
 from events import *
-from multiprocessing import Process
 
 # Set to remember if the bot is already running, since on_ready may be called
 # more than once on reconnects
@@ -21,6 +20,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 ###############################################################################
+
 
 def main():
     # Initialize the client
@@ -41,7 +41,8 @@ def main():
         if settings.NOW_PLAYING:
             print("Setting NP game", flush=True)
             await client.change_presence(
-                activity=discord.Game(name=settings.NOW_PLAYING))
+                activity=discord.Game(name=settings.NOW_PLAYING)
+            )
         print("Logged in!", flush=True)
 
         # Load all events
@@ -49,8 +50,9 @@ def main():
         n_ev = 0
         for ev in BaseEvent.__subclasses__():
             event = ev()
-            sched.add_job(event.run, 'interval', (client,),
-                          minutes=event.interval_minutes)
+            sched.add_job(
+                event.run, "interval", (client,), minutes=event.interval_minutes
+            )
             n_ev += 1
         sched.start()
         print(f"{n_ev} events loaded", flush=True)
@@ -59,11 +61,12 @@ def main():
     async def common_handle_message(message):
         text = message.content
         if text.startswith(settings.COMMAND_PREFIX) and text != settings.COMMAND_PREFIX:
-            cmd_split = text[len(settings.COMMAND_PREFIX):].split()
+            cmd_split = text[len(settings.COMMAND_PREFIX) :].split()
             print(cmd_split)
             try:
-                await message_handler.handle_command(cmd_split[0].lower(),
-                                                     cmd_split[1:], message, client)
+                await message_handler.handle_command(
+                    cmd_split[0].lower(), cmd_split[1:], message, client
+                )
             except:
                 print("Error while handling message", flush=True)
                 raise
@@ -71,9 +74,16 @@ def main():
     # Only takes in the message if it is in the desired channels
     @client.event
     async def on_message(message):
-        if message.channel.type != discord.ChannelType.private and message.channel.name in settings.CHANNEL:
+        if (
+            message.channel.type != discord.ChannelType.private
+            and message.channel.name in settings.CHANNEL
+        ):
             await common_handle_message(message)
-        elif message.author.bot and len(message.embeds) > 0 and settings.TRACK in message.channel.name:
+        elif (
+            message.author.bot
+            and len(message.embeds) > 0
+            and settings.TRACK in message.channel.name
+        ):
             organhandle = OrganiserBotHandle(message.embeds[-1], message, client)
             await organhandle.handle()
 

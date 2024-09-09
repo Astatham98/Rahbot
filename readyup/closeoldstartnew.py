@@ -1,6 +1,6 @@
 async def close(message):
     async for message in message.channel.history(limit=5):
-        if message.author.name == 'Raid Organizer':
+        if message.author.name == "Raid Organizer":
             await message.delete()
         elif message.author.bot and message.embeds:
             await message.delete(delay=600.0)
@@ -10,7 +10,7 @@ async def close(message):
 
 async def fail_close(message):
     async for message in message.channel.history(limit=5):
-        if message.author.name == 'Raid Organizer':
+        if message.author.name == "Raid Organizer":
             await message.delete()
 
 
