@@ -4,6 +4,7 @@ import settings
 from database import Database
 from readyup.readyup import Ready
 from readyup import closeoldstartnew as closeopen
+from readyup.getServerFromEmbed import mapMessageHandler 
 import re
 
 
@@ -27,6 +28,9 @@ class OrganiserBotHandle:
         elif self.get_game_started(self.embed):
             game_id = self.get_game_id(self.embed)
             if game_id in settings.LAST_PLAYED: settings.LAST_PLAYED.remove(game_id)
+            #Get the connect for a match
+            connectStr = await mapMessageHandler(self.embed, game_id)
+            await self.message.channel.send(connectStr)
             await self.get_teams(self.embed)
 
     # Find the total number of players added
