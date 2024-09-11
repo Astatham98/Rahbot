@@ -54,7 +54,7 @@ class Rank(BaseCommand):
             embed = discord.Embed(title="Rank", color=0x7434EB)
 
             embed.add_field(name="Rank", value=rank + 1, inline=True)
-            embed.add_field(name="Player", value=member.name, inline=True)
+            embed.add_field(name="Player", value=member.display_name, inline=True)
             embed.add_field(name="Games Played", value=games_played, inline=True)
 
             return embed

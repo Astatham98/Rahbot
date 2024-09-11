@@ -42,6 +42,7 @@ class Database:
             if os.environ.get("DATABASE_NAME") is not None
             else config.get("DATABASE", "DATABASE_NAME")
         )
+        self.cur = None
 
     def _pre_call(self):
         self.open()
@@ -200,6 +201,19 @@ class Database:
         return exist_and_same, no_user_with_linkedProfile
 
     @pre_post_call
+    def get_warned_player(self, id):
+        self.cur.execute("SELECT * from warnings where warnings.id = %s", [id])
+        return self.cur.fetchall()
+
+    @pre_post_call
+    def warn_player(self, id, duration, reason=""):
+        self.cur.execute(
+            "INSERT INTO WARNINGS (id, banTime, reason) VALUES (%s, %s, %s)",
+            (id, duration, reason),
+        )
+        self.conn.commit()
+
+    @pre_post_call
     def create_leaderboard_table(self):
         # id name played
         self.cur.execute(
@@ -219,6 +233,14 @@ class Database:
         # id linkedProfile steamProfile dateRegistered Verified
         self.cur.execute(
             "CREATE TABLE IF NOT EXISTS users(id VARCHAR(255) PRIMARY KEY, linkedProfile VARCHAR(255), steam VARCHAR(255), dateRegistered TIMESTAMP, verified BOOLEAN)"
+        )
+        self.conn.commit()
+
+    @pre_post_call
+    def create_warnings_table(self):
+        # TODO DROP THIS TABLE AND RECREATE
+        self.cur.execute(
+            "CREATE TABLE IF NOT EXISTS warnings(id VARCHAR(255), banTime INTEGER, reason VARCHAR(255))"
         )
         self.conn.commit()
 
