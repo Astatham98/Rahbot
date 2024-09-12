@@ -173,6 +173,14 @@ class Database:
             (member_id, linkedProfile, steamProfile, dt, verified),
         )
         self.conn.commit()
+        
+    @pre_post_call
+    def get_user_accounts(self, account_type, account_link):
+        self.cur.execute(
+            f"SELECT * from users WHERE users.{account_type} = %s", [account_link]
+        )
+        #[id, etf2l, steam, registered, verified]
+        return self.cur.fetchone()
 
     @pre_post_call
     def check_user_exists(self, member_id, link):
@@ -238,7 +246,6 @@ class Database:
 
     @pre_post_call
     def create_warnings_table(self):
-        # TODO DROP THIS TABLE AND RECREATE
         self.cur.execute(
             "CREATE TABLE IF NOT EXISTS warnings(id VARCHAR(255), banTime INTEGER, reason VARCHAR(255))"
         )

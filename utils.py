@@ -75,3 +75,9 @@ async def try_upload_file(
         )
 
     return sent_msg
+
+def parse_mention(mention: str):
+    """turns a mention into an id string"""
+    id = mention.replace(">", "")
+    id = id.replace("<@", "")
+    return id.split("!")[-1]
