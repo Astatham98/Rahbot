@@ -40,4 +40,5 @@ ADMIN_COMMANDS = [
     "setup",
     "setupdb",
     "warnings",
+    "getuseraccounts"
 ]
