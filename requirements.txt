@@ -24,7 +24,7 @@ setuptools==74.1.1
 six==1.16.0
 typing-extensions==4.12.2
 tzlocal==2.1
-urllib3==2.2.2
+urllib3==2.6.3
 yarl==1.9.7
 Flask==2.2.5
 gunicorn==23.0.0
