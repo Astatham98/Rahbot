@@ -1,5 +1,5 @@
 from commands.base_command import BaseCommand
-from database import Database
+from database_sqlite import Database
 import utils
 import re
 import discord
@@ -42,7 +42,7 @@ class GetUserAccounts(BaseCommand):
         if query_type is not None:
             return self.db.get_user_accounts(query_type, query)
         else:
-            await message.channel.send_message("Invalid user")
+            await message.channel.send("Invalid user")
             return
         
     def generate_embed(self, discord_user, user_details):

@@ -6,8 +6,8 @@ from divgetters.sa_player_id_get import SA
 from time import sleep
 from divgetters.rgl_player_id_get import RGL
 import discord
-from database import Database
-from psycopg2 import errors
+from database_sqlite import Database
+import sqlite3
 
 
 class Div(BaseCommand):
@@ -148,7 +148,7 @@ class Div(BaseCommand):
     def insert_user(self, meber_id, Etf2l_link, steam, verified):
         try:
             self.db.insert_into_users(meber_id, Etf2l_link, steam, verified)
-        except errors.UniqueViolation:
+        except sqlite3.IntegrityError:
             print("user already exists")
 
     # Needs more thought before implementation

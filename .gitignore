@@ -8,3 +8,7 @@ bin/
 env/
 lib/
 commands/test_command.py
+tests/
+__pycache__/
+.gitattributes
+implementation_plan.md

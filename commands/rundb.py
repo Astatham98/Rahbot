@@ -1,5 +1,5 @@
 from commands.base_command import BaseCommand
-from database import Database
+from database_sqlite import Database
 
 
 class RunDB(BaseCommand):

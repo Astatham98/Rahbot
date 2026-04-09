@@ -1,7 +1,7 @@
 from autobalance import mentionByRank
 from autobalance import autobalance
 import settings
-from database import Database
+from database_sqlite import Database
 from readyup.getServerFromEmbed import mapMessageHandler
 import re
 

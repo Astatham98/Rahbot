@@ -1,6 +1,46 @@
 import discord
 from commands.base_command import BaseCommand
-from colour import Color
+
+
+def hex_to_rgb(hex_color: str) -> tuple:
+    """Convert hex color to RGB tuple.
+    
+    Args:
+        hex_color: Hex color string (e.g., 'FF0055' or '#FF0055')
+        
+    Returns:
+        Tuple of (r, g, b) values (0-255)
+    """
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+
+
+def name_to_rgb(color_name: str) -> tuple:
+    """Convert common color names to RGB tuple.
+    
+    Args:
+        color_name: Color name (e.g., 'red', 'blue', 'green')
+        
+    Returns:
+        Tuple of (r, g, b) values (0-255) or None if not found
+    """
+    color_map = {
+        'red': (255, 0, 0),
+        'green': (0, 255, 0),
+        'blue': (0, 0, 255),
+        'yellow': (255, 255, 0),
+        'cyan': (0, 255, 255),
+        'magenta': (255, 0, 255),
+        'white': (255, 255, 255),
+        'black': (0, 0, 0),
+        'orange': (255, 165, 0),
+        'purple': (128, 0, 128),
+        'pink': (255, 192, 203),
+        'brown': (165, 42, 42),
+        'gray': (128, 128, 128),
+        'grey': (128, 128, 128),
+    }
+    return color_map.get(color_name.lower())
 
 
 class EditRoleColor(BaseCommand):
@@ -17,16 +57,37 @@ class EditRoleColor(BaseCommand):
         admin = message.author.guild_permissions.administrator
 
         try:
-            # Coverts from Color colour to a discord colour
-            c = Color(colour).rgb
-            r, g, b = int(c[0] * 100), int(c[1] * 100), int(c[2] * 100)
-            c = discord.Colour.from_rgb(r, g, b)
+            # Try hex color first
+            if colour.startswith('#'):
+                r, g, b = hex_to_rgb(colour)
+            elif colour.startswith('0x') or len(colour) == 6:
+                try:
+                    # Try parsing as hex
+                    r, g, b = hex_to_rgb(colour)
+                except ValueError:
+                    # Try as color name
+                    rgb = name_to_rgb(colour)
+                    if rgb:
+                        r, g, b = rgb
+                    else:
+                        raise ValueError("Unknown color")
+            else:
+                # Try as color name
+                rgb = name_to_rgb(colour)
+                if rgb:
+                    r, g, b = rgb
+                else:
+                    raise ValueError("Unknown color")
+            
+            discord_color = discord.Colour.from_rgb(r, g, b)
 
             if admin:
                 # Edits the users role with the new colour
-                await self.edit_role(message, role, c)
+                await self.edit_role(message, role, discord_color)
             else:
                 await message.channel.send("Insufficient rank.")
+        except ValueError:
+            await message.channel.send("Unknown colour.")
         except Exception:
             await message.channel.send("Unknown colour.")
 
