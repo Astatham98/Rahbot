@@ -1,5 +1,6 @@
 """Get division slash command."""
 
+import time
 import discord
 from discord.ext import commands
 from divgetters.etf2l_player_id_get import Etf2l
@@ -80,19 +81,50 @@ async def getdiv_slash(ctx: discord.ApplicationContext, profile_url: str):
                     await ctx.author.remove_roles(role)
                     
         # Assign the new role
-        success = False
-        for div in divs:
+        success = [ False ] * len(divs)
+        for i, div in enumerate(divs):
             role = discord.utils.find(
                 lambda r: r.name.lower().replace(" ", "") == div.lower().replace(" ", ""),
                 roles
             )
             if role:
                 await ctx.author.add_roles(role)
-                await ctx.respond(f"✅ {ctx.author.mention} has been given the **{div}** role.")
-                success = True
-                break
+                await ctx.respond(f"{ctx.author.mention} has been given the **{div}** role.")
+                success[i] = True
                 
-        if not success:
+        if not any(success):
             await ctx.respond("Valid profile, but no matching role found for your division.")
+        else:
+            
+            time.sleep(1)
+            await ctx.channel.purge()
+            await welcome_message_embed(ctx)
     else:
         await ctx.respond("This profile is already registered to another user.")
+        
+async def welcome_message_embed(ctx):
+        embed = discord.Embed(
+            title="Step up and get your div here!",
+            description="Type use /div {your region profile here}",
+            color=0x00D9FF,
+        )
+        embed.add_field(
+            name="EU", value="/div https://etf2l.org/forum/user/109984/", inline=False
+        )
+        embed.add_field(
+            name="NA",
+            value="/div https://rgl.gg/Public/PlayerProfile.aspx?p=76561198136056704&r=40",
+            inline=False,
+        )
+        embed.add_field(
+            name="OzFort", value="/div https://ozfortress.com/users/2533", inline=False
+        )
+        embed.add_field(
+            name="Asia", value="/div https://match.tf/users/5640", inline=False
+        )
+        embed.add_field(name="SA", value="/div https://fbtf.tf/users/788", inline=False)
+        embed.add_field(name="Casual", value="/div casual", inline=False)
+        embed.set_footer(
+            text="If you get the incorrect rank or the bot misses a rank, contact Rahmed."
+        )
+        await ctx.channel.send(embed=embed)

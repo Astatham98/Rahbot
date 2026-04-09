@@ -3,6 +3,13 @@ import time
 
 
 class Etf2l:
+    def __init__(self):
+        self.etf2l_divs = {
+            'Division 4': 'Mid',
+            'Division 3': 'Mid',
+            'High': 'Division_2',
+            'Fresh': 'Open'
+        }
     def get_div(self, etf2l, sixes=True):
         split = etf2l.split("/")
         id = split[-2]
@@ -48,6 +55,7 @@ class Etf2l:
                 )
 
                 ender = gamemode if gamemode != "6v6" else "6's"
+                div = self.etf2l_divs.get(div, div)
                 divs.append("Etf2l - " + div + " " + ender)
         print(divs)
         return divs

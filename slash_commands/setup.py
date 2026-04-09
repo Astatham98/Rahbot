@@ -20,7 +20,7 @@ async def setup_slash(ctx: discord.ApplicationContext):
     
     try:
         # Run setup
-        db_setup.handle(None, ctx.message, None)
+        await db_setup.handle(None, ctx.message, None)
         
         embed = discord.Embed(
             title="Database Setup Complete",

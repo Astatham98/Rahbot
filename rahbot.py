@@ -20,6 +20,10 @@ sched = AsyncIOScheduler()
 # Intents setup
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
+intents.guilds = True
+intents.messages = True
+
 
 ###############################################################################
 
@@ -110,8 +114,8 @@ def main():
                 raise
 
     # Only takes in the message if it is in the desired channels
-    @client.event
-    async def on_message(message):
+    @client.listen()
+    async def on_message(message: discord.Message):
         if (
             message.channel.type != discord.ChannelType.private
             and message.channel.name in settings.CHANNEL

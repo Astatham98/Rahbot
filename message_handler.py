@@ -17,6 +17,7 @@ async def handle_command(command, args, message, bot_client):
     # (to prevent unnecesary spam if our bot shares the same command prefix
     # with some other bot)
     if command not in COMMAND_HANDLERS:
+        print(f"Unknown command: {command}")
         return
 
     print(
