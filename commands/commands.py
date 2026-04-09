@@ -1,5 +1,5 @@
 import discord
-import utils
+from discord.ui import Button, View
 import settings
 from commands.base_command import BaseCommand
 
@@ -11,7 +11,6 @@ class Commands(BaseCommand):
         description = "Displays this help message"
         params = None
         super().__init__(description, params)
-        self.page = 1
 
     async def handle(self, params, message, client):
         from message_handler import COMMAND_HANDLERS
@@ -30,14 +29,10 @@ class Commands(BaseCommand):
 
         msg_pages = self.parsetext(msg)
 
+        # Create pagination view with buttons
+        view = PaginationView(msg_pages, self.create_embed)
         embed = self.create_embed(msg_pages[0])
-        msg = await message.channel.send(embed=embed)
-        await self.add_reactions(msg)
-        while True:
-            reaction, user = await client.wait_for("reaction_add", check=self.check)
-            correct_emoji = await self.remove_reaction(msg, user, reaction)
-            if correct_emoji:
-                await self.change_page(msg_pages, msg, reaction, len(msg_pages))
+        await message.channel.send(embed=embed, view=view)
 
     def parsetext(self, text):
         """Parses text into seperate strings to"""
@@ -55,38 +50,41 @@ class Commands(BaseCommand):
 
         return page_content
 
-    def check(self, reaction, user):
-        return not user.bot
-
-    async def remove_reaction(self, msg, user, emoji):
-        # Removes reactions from the message, if desired emoji return the true
-        await msg.remove_reaction(emoji, user)
-
-        if str(emoji) not in (
-            str(utils.get_emoji("arrow_backward")),
-            str(utils.get_emoji("arrow_forward")),
-        ):
-            return False
-        return True
-
-    async def add_reactions(self, msg):
-        await msg.add_reaction(utils.get_emoji("arrow_backward"))
-        await msg.add_reaction(utils.get_emoji("arrow_forward"))
-
-    async def change_page(self, msgs, msg, reaction, pages):
-        if (
-            str(reaction) == str(utils.get_emoji("arrow_forward"))
-            and self.page + 1 <= pages
-        ):
-            self.page += 1
-        elif (
-            str(reaction) == str(utils.get_emoji("arrow_backward"))
-            and self.page - 1 > 0
-        ):
-            self.page -= 1
-        await msg.edit(embed=self.create_embed(msgs[self.page - 1]))
-
     def create_embed(self, msg):
         embed = discord.Embed(title="Commands", color=0xFF0055)
         embed.add_field(name="User Commands", value=msg, inline=True)
         return embed
+
+
+class PaginationView(View):
+    def __init__(self, pages, create_embed_func):
+        super().__init__(timeout=None)
+        self.pages = pages
+        self.current_page = 0
+        self.create_embed = create_embed_func
+        self._update_buttons()
+
+    def _update_buttons(self):
+        # Disable buttons when at first/last page
+        self.prev_button.disabled = self.current_page == 0
+        self.next_button.disabled = self.current_page == len(self.pages) - 1
+
+    @discord.ui.button(label="◀ Previous", style=discord.ButtonStyle.primary)
+    async def prev_button(self, button: Button, interaction: discord.Interaction):
+        if self.current_page > 0:
+            self.current_page -= 1
+            self._update_buttons()
+            await interaction.response.edit_message(
+                embed=self.create_embed(self.pages[self.current_page]),
+                view=self
+            )
+
+    @discord.ui.button(label="Next ▶", style=discord.ButtonStyle.primary)
+    async def next_button(self, button: Button, interaction: discord.Interaction):
+        if self.current_page < len(self.pages) - 1:
+            self.current_page += 1
+            self._update_buttons()
+            await interaction.response.edit_message(
+                embed=self.create_embed(self.pages[self.current_page]),
+                view=self
+            )

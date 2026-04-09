@@ -33,6 +33,9 @@ def main():
     print("Starting up...")
     client = discord.Bot(intents=intents, command_prefix=settings.COMMAND_PREFIX)
     
+    @client.slash_command(name="help", description="Displays help message with all available commands")
+    async def slash_help_handler(ctx: discord.ApplicationContext):
+        await slash_commands.help_slash(ctx)
     # Register slash commands
     @client.slash_command(name="leaderboard", description="Show the games played leaderboard")
     @option("page", description="Page number to display (default: 1)", required=False)
@@ -68,6 +71,8 @@ def main():
     @client.slash_command(name="getserver", description="Get a reserved server for your game")
     async def slash_getserver(ctx: discord.ApplicationContext):
         await slash_commands.getserver_slash(ctx)
+        
+    
 
     # Define event handlers for the client
     # on_ready may be called multiple times in the event of a reconnect,
