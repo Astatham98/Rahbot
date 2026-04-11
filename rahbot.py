@@ -8,6 +8,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from events.base_event import BaseEvent
 from events import *
 import slash_commands
+from slash_commands.getserver import get_map_choices, DEFAULT_MAP_CHOICE
 
 # Set to remember if the bot is already running, since on_ready may be called
 # more than once on reconnects
@@ -81,9 +82,9 @@ def main():
         await slash_commands.medicpicker_slash(ctx, player)
         
     @client.slash_command(name="getserver", description="Get a reserved server for your game")
-    @option("map_choice", description="Map shortname (e.g. process, sunshine, product)", required=True)
+    @option("map_choice", description="Map shortname", required=False, choices=get_map_choices())
     @option("location", description="Optional location override: de/fr/nl/", required=False, choices=["de", "fr", "nl"])
-    async def slash_getserver(ctx: discord.ApplicationContext, map_choice: str, location: str = None):
+    async def slash_getserver(ctx: discord.ApplicationContext, map_choice: str = DEFAULT_MAP_CHOICE, location: str = None):
         await slash_commands.getserver_slash(ctx, map_choice, location)
 
     @client.slash_command(
