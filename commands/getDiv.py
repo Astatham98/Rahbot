@@ -7,7 +7,7 @@ from time import sleep
 from divgetters.rgl_player_id_get import RGL
 import discord
 from database import Database
-from psycopg2 import errors
+import sqlite3
 
 
 class Div(BaseCommand):
@@ -31,6 +31,7 @@ class Div(BaseCommand):
         if no_users or exist_and_same:
             steam = await self.get_user_steam(link)
             self.insert_user(str(msg.author.id), link, steam, False)
+            self.db.ensure_player_in_leaderboard(str(msg.author.id), msg.author.name)
             banned = self.check_banned(link)
 
             divs = ["banned"] if banned else divs
@@ -148,7 +149,7 @@ class Div(BaseCommand):
     def insert_user(self, meber_id, Etf2l_link, steam, verified):
         try:
             self.db.insert_into_users(meber_id, Etf2l_link, steam, verified)
-        except errors.UniqueViolation:
+        except Exception:
             print("user already exists")
 
     # Needs more thought before implementation

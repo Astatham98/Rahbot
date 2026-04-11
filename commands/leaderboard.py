@@ -1,8 +1,7 @@
 from commands.base_command import BaseCommand
 from database import Database
 import discord
-import utils
-import math
+from pagination import ButtonPaginationView
 
 
 class Leaderboard(BaseCommand):
@@ -11,7 +10,6 @@ class Leaderboard(BaseCommand):
         description = "Returns a leaderboard."
         params = None
         super().__init__(description, params)
-        self.page = 1
 
     async def handle(self, params, message, client):
         db = self.db
@@ -23,26 +21,39 @@ class Leaderboard(BaseCommand):
             embed = self.get_player_rank(player, id, played)
             await message.channel.send(embed=embed)
         else:
-            embed = self.create_embed(name, played)
-            msg = await message.channel.send(embed=embed)
-            await self.add_reactions(msg)
-            while True:
-                reaction, user = await client.wait_for("reaction_add", check=self.check)
-                correct_emoji = await self.remove_reaction(msg, user, reaction)
-                if correct_emoji:
-                    await self.change_page(msg, reaction, name, played)
+            pages = self.build_pages(name, played)
+            view = ButtonPaginationView(pages, self.create_embed, message.author.id)
+            embed = view.current_embed()
+            sent_msg = await message.channel.send(embed=embed, view=view)
+            view.message = sent_msg
 
-    def create_embed(self, name, played):
+    def build_pages(self, names, played):
+        pages = []
+        for start in range(0, len(names), 25):
+            end = start + 25
+            pages.append((names[start:end], played[start:end], start))
+
+        if len(pages) == 0:
+            pages.append(([], [], 0))
+
+        return pages
+
+    def create_embed(self, page_data, page_index=0, total_pages=1):
+        names, played, base_index = page_data
         embed = discord.Embed(title="Leaderboard*", color=0x7434EB)
-        team1_text = "\n".join(name[(self.page - 1) * 25 : self.page * 25])
-        team2_text = "\n".join(
-            [str(x) for x in played[(self.page - 1) * 25 : self.page * 25]]
-        )
-        rank = "\n".join([str(x + 1 + (25 * (self.page - 1))) for x in range(25)])
+        team1_text = "\n".join(names)
+        team2_text = "\n".join([str(x) for x in played])
+        page_len = len(names)
+        rank = "\n".join([str(base_index + x + 1) for x in range(page_len)])
 
-        embed.add_field(name="Rank", value=rank, inline=True)
-        embed.add_field(name="Player", value=team1_text, inline=True)
-        embed.add_field(name="Games Played", value=team2_text, inline=True)
+        embed.add_field(name="Rank", value=rank if rank else "-", inline=True)
+        embed.add_field(
+            name="Player", value=team1_text if team1_text else "-", inline=True
+        )
+        embed.add_field(
+            name="Games Played", value=team2_text if team2_text else "-", inline=True
+        )
+        embed.set_footer(text=f"Page {page_index + 1}/{total_pages}")
 
         return embed
 
@@ -71,33 +82,3 @@ class Leaderboard(BaseCommand):
     def clean_id(self, id):
         id = id.replace(">", "")
         return id.split("!")[-1]
-
-    def check(self, reaction, user):
-        return not user.bot
-
-    async def remove_reaction(self, msg, user, emoji):
-        # Removes reactions from the message, if desired emoji return the true
-        await msg.remove_reaction(emoji, user)
-
-        if str(emoji) not in (
-            str(utils.get_emoji("arrow_backward")),
-            str(utils.get_emoji("arrow_forward")),
-        ):
-            return False
-        return True
-
-    async def add_reactions(self, msg):
-        await msg.add_reaction(utils.get_emoji("arrow_backward"))
-        await msg.add_reaction(utils.get_emoji("arrow_forward"))
-
-    async def change_page(self, msg, reaction, name, played):
-        if str(reaction) == str(
-            utils.get_emoji("arrow_forward")
-        ) and self.page + 1 <= math.ceil(len(name) / 25):
-            self.page += 1
-        elif (
-            str(reaction) == str(utils.get_emoji("arrow_backward"))
-            and self.page - 1 > 0
-        ):
-            self.page -= 1
-        await msg.edit(embed=self.create_embed(name, played))

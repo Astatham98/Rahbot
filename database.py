@@ -87,6 +87,18 @@ class Database:
         self.conn.commit()
 
     @pre_post_call
+    def ensure_player_in_leaderboard(self, member_id, member_name):
+        """Ensure a player exists in leaderboard with 0 games played.
+
+        Does not overwrite existing rows.
+        """
+        self.cur.execute(
+            "INSERT INTO leaderboard (id, name, played) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING",
+            (str(member_id), member_name, 0),
+        )
+        self.conn.commit()
+
+    @pre_post_call
     def get_players_and_games_played(self):
         self.cur.execute("SELECT * FROM leaderboard ORDER BY leaderboard.played DESC")
         board = self.cur.fetchall()
