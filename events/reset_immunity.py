@@ -1,7 +1,7 @@
 from events.base_event import BaseEvent
 
 from datetime import datetime
-from database_sqlite import Database
+from database import Database
 
 
 # Your friendly example event

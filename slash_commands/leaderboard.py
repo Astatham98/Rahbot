@@ -1,7 +1,7 @@
 """Leaderboard slash command."""
 
 import discord
-from database_sqlite import Database
+from database import Database
 from pagination import ButtonPaginationView
 
 

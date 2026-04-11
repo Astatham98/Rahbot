@@ -7,7 +7,7 @@ from divgetters.ozf_player_id_get import Ozfortress
 from divgetters.asia_player_id_get import AsiaFortress
 from divgetters.sa_player_id_get import SA
 from divgetters.rgl_player_id_get import RGL
-from database_sqlite import Database
+from database import Database
 
 
 async def getdiv_slash(ctx: discord.ApplicationContext, profile_url: str):

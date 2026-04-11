@@ -1,7 +1,7 @@
 """Medic picker slash command."""
 
 import discord
-from database_sqlite import Database
+from database import Database
 import random
 
 

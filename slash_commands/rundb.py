@@ -1,7 +1,7 @@
 """Run DB maintenance slash command."""
 
 import discord
-from database_sqlite import Database
+from database import Database
 
 
 async def rundb_slash(

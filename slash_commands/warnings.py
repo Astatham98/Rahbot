@@ -2,7 +2,7 @@
 
 import re
 import discord
-from database_sqlite import Database
+from database import Database
 
 
 def convert_duration(duration):

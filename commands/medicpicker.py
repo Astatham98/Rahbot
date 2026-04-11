@@ -1,6 +1,6 @@
 from commands.base_command import BaseCommand
 import settings
-from database_sqlite import Database
+from database import Database
 import random
 import time
 

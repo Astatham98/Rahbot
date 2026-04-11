@@ -1,7 +1,7 @@
 """Rank slash command."""
 
 import discord
-from database_sqlite import Database
+from database import Database
 
 
 async def rank_slash(ctx: discord.ApplicationContext, player: discord.Member = None):

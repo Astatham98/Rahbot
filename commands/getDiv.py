@@ -6,7 +6,7 @@ from divgetters.sa_player_id_get import SA
 from time import sleep
 from divgetters.rgl_player_id_get import RGL
 import discord
-from database_sqlite import Database
+from database import Database
 import sqlite3
 
 

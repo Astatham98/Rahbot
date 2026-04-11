@@ -1,5 +1,5 @@
 from commands.base_command import BaseCommand
-from database_sqlite import Database
+from database import Database
 
 
 class setupDB(BaseCommand):
