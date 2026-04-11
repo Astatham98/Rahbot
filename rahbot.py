@@ -212,6 +212,14 @@ def main():
     @client.event
     async def on_message_edit(before, after):
         await common_handle_message(after)
+        # Pubobot edits a message to add an embed instead of just sending an embed 
+        if (
+            after.author.bot
+            and len(after.embeds) > 0
+            and settings.TRACK in after.channel.name
+        ):
+            organhandle = OrganiserBotHandle(after.embeds[-1], after, client)
+            await organhandle.handle()
 
     # Finally, set the bot running
     client.run(settings.BOT_TOKEN)

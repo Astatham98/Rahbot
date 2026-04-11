@@ -9,15 +9,19 @@ def return_ranks_embed(members):
     region_dict = {}
     # for each members add to a dictionary with {member: div} and {member: skill{
     for member in members:
-        print(member)
         roles = member.roles
-        div, region = getRanks.get_region_roles(roles)  # Gets the users text div
-        skill = getRanks.get_skill(div, region)  # gets the users skill number
+        if roles:
+            div, region = getRanks.get_region_roles(roles)  # Gets the users text div
+            
+            skill = getRanks.get_skill(div, region)  # gets the users skill number
 
-        divs[member] = div
-        skill_divs[member] = skill
-        region_dict[member] = get_shortened(region)
-
+            divs[member] = div
+            skill_divs[member] = skill
+            region_dict[member] = get_shortened(region)
+        else:
+            divs[member] = "Unknown"
+            skill_divs[member] = 1
+            region_dict[member] = "Unknown"
     # Sorts the skill dict from largest to smallest
     skill_divs = dict(
         sorted(skill_divs.items(), key=lambda item: item[1], reverse=True)
