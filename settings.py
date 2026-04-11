@@ -16,7 +16,7 @@ BOT_TOKEN = (
 )
 
 # The now playing game. Set this to anything false-y ("", None) to disable it
-NOW_PLAYING = COMMAND_PREFIX + "commands"
+NOW_PLAYING = "/help"
 
 # Base directory. Feel free to use it if you want.
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))

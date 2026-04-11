@@ -8,6 +8,11 @@ from .getdiv import getdiv_slash
 from .medicpicker import medicpicker_slash
 from .getserver import getserver_slash
 from .help import help_slash
+from .getuseraccounts import getuseraccounts_slash
+from .mentionmode import mentionmode_slash
+from .editrolecolor import editrolecolor_slash
+from .editrolename import editrolename_slash
+from .rundb import rundb_slash
 
 __all__ = [
     "leaderboard_slash",
@@ -17,5 +22,10 @@ __all__ = [
     "getdiv_slash",
     "medicpicker_slash",
     "getserver_slash",
-    "help_slash"
+    "help_slash",
+    "getuseraccounts_slash",
+    "mentionmode_slash",
+    "editrolecolor_slash",
+    "editrolename_slash",
+    "rundb_slash",
 ]

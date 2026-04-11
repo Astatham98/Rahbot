@@ -1,113 +1,100 @@
 """Warnings slash command."""
 
+import re
 import discord
-from discord.ext import commands
 from database_sqlite import Database
+
+
+def convert_duration(duration):
+    conv_dur = 1440
+    readable = "24 hours"
+
+    if duration is None:
+        return conv_dur, readable
+
+    duration = duration.lower().strip()
+    if duration in ("p", "perma", "permanent"):
+        return 526000 * 5, "5 years"
+
+    match = re.match(r"^(\d+)([a-z]+)$", duration)
+    if not match:
+        raise ValueError("Invalid duration format")
+
+    duration_time = int(match.group(1))
+    time_val = match.group(2)
+
+    if time_val in ("h", "hour", "hours"):
+        conv_dur = duration_time * 60
+        readable = f"{duration_time} hour(s)"
+    elif time_val in ("d", "day", "days"):
+        conv_dur = duration_time * 1440
+        readable = f"{duration_time} day(s)"
+    elif time_val in ("m", "min", "mins", "minute", "minutes"):
+        conv_dur = duration_time
+        readable = f"{duration_time} minute(s)"
+    elif time_val in ("w", "week", "weeks"):
+        conv_dur = duration_time * 1440 * 7
+        readable = f"{duration_time} week(s)"
+    elif time_val in ("mo", "month", "months"):
+        conv_dur = duration_time * 43800
+        readable = f"{duration_time} month(s)"
+    elif time_val in ("s", "sec", "secs", "second", "seconds"):
+        conv_dur = max(1, int(duration_time * (1 / 60)))
+        readable = f"{duration_time} second(s)"
+    else:
+        raise ValueError("Invalid duration format")
+
+    return conv_dur, readable
 
 
 async def warnings_slash(
     ctx: discord.ApplicationContext,
+    mode: str,
     player: discord.Member = None,
     duration: str = None,
-    reason: str = None
+    reason: str = None,
 ):
-    """Manage player warnings.
-    
-    Parameters
-    ----------
-    player: discord.Member
-        Player to warn or view warnings for
-    duration: str
-        Warning duration (e.g. 1h, 3d, 1w, permanent)
-    reason: str
-        Reason for the warning
-    """
-    await ctx.defer()
-    
+    """Manage player warnings with explicit get/give mode."""
     db = Database()
-    
+
     # Check if user has admin permissions
     if not ctx.author.guild_permissions.administrator:
         await ctx.respond("You do not have permission to use this command.", ephemeral=True)
         return
-    
-    # No player provided - show help
+
+    command_type = mode.lower()
+    if command_type not in ("get", "give"):
+        await ctx.respond("Incorrect parameter input")
+        return
+
     if not player:
-        embed = discord.Embed(
-            title="Warnings Command Help",
-            description="Manage player warnings",
-            color=discord.Colour.orange()
-        )
-        embed.add_field(
-            name="View warnings",
-            value="`/warnings @Player` - View all warnings for a player",
-            inline=False
-        )
-        embed.add_field(
-            name="Issue warning",
-            value="`/warnings @Player 2h \"Spamming chat\"`\n"
-                  "Valid durations: 1h, 2h, 6h, 12h, 1d, 3d, 1w, permanent",
-            inline=False
-        )
-        await ctx.respond(embed=embed)
+        await ctx.respond("Player is required.")
         return
-    
-    # View existing warnings
-    if not duration or not reason:
+
+    if command_type == "get":
         warnings = db.get_warned_player(str(player.id))
-        
         embed = discord.Embed(
-            title=f"Warnings for {player.display_name}",
-            color=discord.Colour.orange()
+            title=player.display_name,
+            colour=discord.Colour.dark_orange(),
         )
-        
+
         if warnings:
-            for i, warning in enumerate(warnings, 1):
-                duration = f"{warning[1]} minutes"
-                embed.add_field(
-                    name=f"Warning #{i}",
-                    value=f"Duration: **{duration}**\nReason: {warning[2]}",
-                    inline=False
-                )
+            text = ""
+            for warning in warnings:
+                text += f"banned for {warning[1]} minutes for: {warning[2]}\n"
         else:
-            embed.description = "No active warnings for this player."
-            
+            text = "No warnings found."
+
+        embed.add_field(name="Warnings", value=text, inline=True)
         await ctx.respond(embed=embed)
         return
-    
-    # Issue new warning
+
     try:
-        # Convert duration to minutes
-        import re
-        
-        if duration.lower() == "permanent":
-            conv_dur = 525600*10  # 10 year in minutes
-            readable = "Permanent"
-        else:
-            match = re.match(r'^(\d+)([hdw])$', duration.lower())
-            if not match:
-                await ctx.respond("Invalid duration format. Use: 1h, 3d, 1w, permanent")
-                return
-                
-            num = int(match.group(1))
-            unit = match.group(2)
-            
-            if unit == 'h':
-                conv_dur = num * 60
-                readable = f"{num} hour(s)"
-            elif unit == 'd':
-                conv_dur = num * 1440
-                readable = f"{num} day(s)"
-            elif unit == 'w':
-                conv_dur = num * 10080
-                readable = f"{num} week(s)"
-        
+        conv_dur, readable = convert_duration(duration)
         db.warn_player(str(player.id), conv_dur, reason)
-        
+
         await ctx.respond(
-            f"**{player.mention}** has been warned for **{readable}**\n"
-            f"Reason: {reason}"
+            f"{player.display_name} has been logged in the database as warned for {readable}"
         )
-        
-    except Exception as e:
-        await ctx.respond(f"Failed to issue warning: {str(e)}")
+    except ValueError:
+        await ctx.respond("Invalid duration format.")

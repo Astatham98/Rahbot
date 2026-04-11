@@ -1,7 +1,7 @@
 import discord
-from discord.ui import Button, View
 import settings
 from commands.base_command import BaseCommand
+from pagination import ButtonPaginationView, split_text_pages
 
 
 # This is a convenient command that automatically generates a helpful
@@ -27,64 +27,16 @@ class Commands(BaseCommand):
             elif message.author.guild_permissions.administrator:
                 msg += "\n" + cmd[1].description
 
-        msg_pages = self.parsetext(msg)
+        msg_pages = split_text_pages(msg)
 
         # Create pagination view with buttons
-        view = PaginationView(msg_pages, self.create_embed)
-        embed = self.create_embed(msg_pages[0])
-        await message.channel.send(embed=embed, view=view)
+        view = ButtonPaginationView(msg_pages, self.create_embed, message.author.id)
+        embed = view.current_embed()
+        sent_msg = await message.channel.send(embed=embed, view=view)
+        view.message = sent_msg
 
-    def parsetext(self, text):
-        """Parses text into seperate strings to"""
-        splittext = text.split("\n")
-
-        page_content = []
-        lines = ""
-        for line in splittext:
-            if len(lines) + len(line) > 1000:
-                page_content.append(lines)
-                lines = line
-            else:
-                lines += line + "\n"
-        page_content.append(lines)
-
-        return page_content
-
-    def create_embed(self, msg):
+    def create_embed(self, msg, page_index=0, total_pages=1):
         embed = discord.Embed(title="Commands", color=0xFF0055)
         embed.add_field(name="User Commands", value=msg, inline=True)
+        embed.set_footer(text=f"Page {page_index + 1}/{total_pages}")
         return embed
-
-
-class PaginationView(View):
-    def __init__(self, pages, create_embed_func):
-        super().__init__(timeout=None)
-        self.pages = pages
-        self.current_page = 0
-        self.create_embed = create_embed_func
-        self._update_buttons()
-
-    def _update_buttons(self):
-        # Disable buttons when at first/last page
-        self.prev_button.disabled = self.current_page == 0
-        self.next_button.disabled = self.current_page == len(self.pages) - 1
-
-    @discord.ui.button(label="◀ Previous", style=discord.ButtonStyle.primary)
-    async def prev_button(self, button: Button, interaction: discord.Interaction):
-        if self.current_page > 0:
-            self.current_page -= 1
-            self._update_buttons()
-            await interaction.response.edit_message(
-                embed=self.create_embed(self.pages[self.current_page]),
-                view=self
-            )
-
-    @discord.ui.button(label="Next ▶", style=discord.ButtonStyle.primary)
-    async def next_button(self, button: Button, interaction: discord.Interaction):
-        if self.current_page < len(self.pages) - 1:
-            self.current_page += 1
-            self._update_buttons()
-            await interaction.response.edit_message(
-                embed=self.create_embed(self.pages[self.current_page]),
-                view=self
-            )
