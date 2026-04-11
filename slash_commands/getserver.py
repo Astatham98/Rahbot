@@ -10,16 +10,11 @@ async def getserver_slash(
     location: str = None,
 ):
     """Get a reserved server for the given map and region."""
-    channel_name = getattr(ctx.channel, "name", "")
-    channel_region = channel_name.split("-")[0] if channel_name else ""
-
-    if channel_region in ("eu", "na"):
-        server_loc = channel_region
-    else:
-        server_loc = "eu"
-
+    
+    # Hardcode for EU - NA no longer in scope
+    server_loc = "eu"
     if location:
-        if location.lower() in ("de", "fr", "nl", "chi", "ks", "la"):
+        if location.lower() in ("de", "fr", "nl"):
             server_loc += " " + location.lower()
 
     try:
@@ -36,14 +31,15 @@ async def getserver_slash(
                 dm_channel = await ctx.author.create_dm()
                 await dm_channel.send(
                     "The rcon string for this server is:\n"
-                    "rcon_address {}; rcon_password {}".format(
+                    "`rcon_address {}; rcon_password {}`".format(
                         server.split(" ")[1].replace(";", ""), rcon
                     )
                 )
                 dm_note = "\nRCON details sent via DM."
             except Exception:
                 dm_note = "\nUnable to send DM with RCON details."
-
-            await ctx.respond("Server IP is:\n{}{}".format(server, dm_note))
+            
+            # TODO would like this to be a prettier embed with region, map and other details, but this is functional for now
+            await ctx.respond(f"Server IP is:\n`{server}`{dm_note}")
     except Exception as e:
-        await ctx.respond(f"Failed to get server: {str(e)}")
+        await ctx.respond(f"Failed to get server: Usually due to no available servers or API issues.")
