@@ -52,6 +52,8 @@ async def getdiv_slash(ctx: discord.ApplicationContext, profile_url: str):
     except Exception:
         pass
 
+    db.ensure_player_in_leaderboard(str(ctx.author.id), ctx.author.name)
+
     if "etf2l" in link and Etf2l.get_banned(link):
         divs = ["banned"]
 

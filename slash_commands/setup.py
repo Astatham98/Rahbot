@@ -34,7 +34,7 @@ async def setup_slash(
             )
             embed.add_field(
                 name="Tables Created",
-                value="- leaderboard\n- games\n- users",
+                value="- leaderboard\n- games\n- users\n- warnings",
                 inline=False,
             )
             await ctx.respond(embed=embed)

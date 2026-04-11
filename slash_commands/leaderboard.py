@@ -48,7 +48,7 @@ async def leaderboard_slash(
             rank = ids.index(str(player.id))
             games_played = played[rank]
 
-            embed = discord.Embed(title="Leaderboard", color=0x7434EB)
+            embed = discord.Embed(title="Rank", color=0x7434EB)
             embed.add_field(name="Rank", value=rank + 1, inline=True)
             embed.add_field(name="Player", value=player.display_name, inline=True)
             embed.add_field(name="Games Played", value=games_played, inline=True)

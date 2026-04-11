@@ -31,6 +31,7 @@ class Div(BaseCommand):
         if no_users or exist_and_same:
             steam = await self.get_user_steam(link)
             self.insert_user(str(msg.author.id), link, steam, False)
+            self.db.ensure_player_in_leaderboard(str(msg.author.id), msg.author.name)
             banned = self.check_banned(link)
 
             divs = ["banned"] if banned else divs
@@ -148,7 +149,7 @@ class Div(BaseCommand):
     def insert_user(self, meber_id, Etf2l_link, steam, verified):
         try:
             self.db.insert_into_users(meber_id, Etf2l_link, steam, verified)
-        except sqlite3.IntegrityError:
+        except Exception:
             print("user already exists")
 
     # Needs more thought before implementation

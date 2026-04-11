@@ -55,13 +55,14 @@ async def warnings_slash(
     reason: str = None,
 ):
     """Manage player warnings with explicit get/give mode."""
-    db = Database()
 
     # Check if user has admin permissions
     if not ctx.author.guild_permissions.administrator:
         await ctx.respond("You do not have permission to use this command.", ephemeral=True)
         return
 
+    db = Database()
+    
     command_type = mode.lower()
     if command_type not in ("get", "give"):
         await ctx.respond("Incorrect parameter input")
@@ -81,7 +82,7 @@ async def warnings_slash(
         if warnings:
             text = ""
             for warning in warnings:
-                text += f"banned for {warning[1]} minutes for: {warning[2]}\n"
+                text += f"banned for {warning[1]} minutes for: {warning[2]}\n "
         else:
             text = "No warnings found."
 

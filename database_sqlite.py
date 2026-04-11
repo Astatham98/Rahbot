@@ -61,6 +61,21 @@ class Database:
         finally:
             self.close()
 
+    def ensure_player_in_leaderboard(self, member_id, member_name):
+        """Ensure a player exists in leaderboard with 0 games played.
+
+        Does not overwrite existing rows.
+        """
+        self.open()
+        try:
+            self.cur.execute(
+                "INSERT OR IGNORE INTO leaderboard (id, name, played) VALUES (?, ?, ?)",
+                (str(member_id), member_name, 0),
+            )
+            self.conn.commit()
+        finally:
+            self.close()
+
     def get_players_and_games_played(self):
         """Get all players and their games played, ordered by games descending.
         

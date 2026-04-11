@@ -12,6 +12,7 @@ def create_embed(msg, page_index=0, total_pages=1):
 
 async def help_slash(ctx: discord.ApplicationContext):
     msg = ""
+    admin_commands = {x.lower() for x in settings.ADMIN_COMMANDS}
     commands_attr = getattr(ctx.bot, "application_commands", None)
     if commands_attr is None:
         commands_attr = getattr(ctx.bot, "pending_application_commands", [])
@@ -20,9 +21,26 @@ async def help_slash(ctx: discord.ApplicationContext):
 
     # Displays all slash command descriptions, sorted alphabetically by command name
     for cmd in slash_commands:
+        command_name = cmd.name.lower()
+        cmd_perms = getattr(cmd, "default_member_permissions", None)
+        is_admin_permission_command = False
+
+        if cmd_perms is not None:
+            try:
+                is_admin_permission_command = bool(getattr(cmd_perms, "administrator", False))
+            except Exception:
+                is_admin_permission_command = False
+
+            if not is_admin_permission_command:
+                try:
+                    admin_bit = discord.Permissions(administrator=True).value
+                    is_admin_permission_command = bool(int(cmd_perms) & admin_bit)
+                except Exception:
+                    pass
+
         if (
             not ctx.author.guild_permissions.administrator
-            and cmd.name.lower() in settings.ADMIN_COMMANDS
+            and (command_name in admin_commands or is_admin_permission_command)
         ):
             continue
 

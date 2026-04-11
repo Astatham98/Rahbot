@@ -13,7 +13,7 @@ class setupDB(BaseCommand):
         self.setup_leaderboard()
         self.setup_games()
         self.setup_users()
-        self.db.close()
+        self.setup_warnings()
 
     def setup_leaderboard(self):
         self.db.create_leaderboard_table()
@@ -23,3 +23,6 @@ class setupDB(BaseCommand):
 
     def setup_users(self):
         self.db.create_users_table()
+
+    def setup_warnings(self):
+        self.db.create_warnings_table()

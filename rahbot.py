@@ -48,7 +48,11 @@ def main():
     async def slash_rank(ctx: discord.ApplicationContext, player: discord.Member = None):
         await slash_commands.rank_slash(ctx, player)
         
-    @client.slash_command(name="warnings", description="Manage player warnings")
+    @client.slash_command(
+        name="warnings",
+        description="Manage player warnings",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("mode", description="Mode: get or give", required=True, choices=["get", "give"])
     @option("player", description="Player to warn or view warnings for", required=False)
     @option("duration", description="Warning duration (e.g. 1h, 3d, 1w, permanent)", required=False)
@@ -56,7 +60,11 @@ def main():
     async def slash_warnings(ctx: discord.ApplicationContext, mode: str, player: discord.Member = None, duration: str = None, reason: str = None):
         await slash_commands.warnings_slash(ctx, mode, player, duration, reason)
         
-    @client.slash_command(name="setup", description="Setup roles or database tables")
+    @client.slash_command(
+        name="setup",
+        description="Setup roles or database tables",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("target", description="roles or db", required=False, choices=["roles", "db"])
     @option("update", description="For roles: update missing roles / colors", required=False)
     async def slash_setup(ctx: discord.ApplicationContext, target: str = "roles", update: bool = False):
@@ -78,23 +86,39 @@ def main():
     async def slash_getserver(ctx: discord.ApplicationContext, map_choice: str, location: str = None):
         await slash_commands.getserver_slash(ctx, map_choice, location)
 
-    @client.slash_command(name="getuseraccounts", description="Get user account links by mention/profile/id")
+    @client.slash_command(
+        name="getuseraccounts",
+        description="Get user account links by mention/profile/id",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("query", description="@user, etf2l profile, or steam profile/id", required=True)
     async def slash_getuseraccounts(ctx: discord.ApplicationContext, query: str):
         await slash_commands.getuseraccounts_slash(ctx, query)
 
-    @client.slash_command(name="mentionmode", description="Get or set mention mode (admin only)")
+    @client.slash_command(
+        name="mentionmode",
+        description="Get or set mention mode (admin only)",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("mode", description="Optional mode value: 0 or 1", required=False, choices=[0, 1])
     async def slash_mentionmode(ctx: discord.ApplicationContext, mode: int = None):
         await slash_commands.mentionmode_slash(ctx, mode)
 
-    @client.slash_command(name="editrolecolor", description="Edit role color (admin only)")
+    @client.slash_command(
+        name="editrolecolor",
+        description="Edit role color (admin only)",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("role_name", description="Role name to edit", required=True)
     @option("color", description="Hex or color name", required=True)
     async def slash_editrolecolor(ctx: discord.ApplicationContext, role_name: str, color: str):
         await slash_commands.editrolecolor_slash(ctx, role_name, color)
 
-    @client.slash_command(name="editrolename", description="Rename a role or mass update rank suffix (admin only)")
+    @client.slash_command(
+        name="editrolename",
+        description="Rename a role or mass update rank suffix (admin only)",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("new_name", description="New role name or suffix", required=True)
     @option("role_name", description="Role to rename (ignored for mass mode)", required=False)
     @option("mass", description="Set true to mass-update division roles", required=False)
@@ -106,7 +130,11 @@ def main():
     ):
         await slash_commands.editrolename_slash(ctx, role_name, new_name, mass)
 
-    @client.slash_command(name="rundb", description="DB maintenance operations (admin only)")
+    @client.slash_command(
+        name="rundb",
+        description="DB maintenance operations (admin only)",
+        default_member_permissions=discord.Permissions(administrator=True),
+    )
     @option("action", description="reset, set_played, or remove", required=True, choices=["reset", "set_played", "remove"])
     @option("player", description="Player to modify", required=True)
     @option("amount", description="Amount for set_played/remove", required=False)
