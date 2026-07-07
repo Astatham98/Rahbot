@@ -33,7 +33,7 @@ pytest==7.4.0
 pytest-asyncio==0.21.0
 pytz==2024.1
 requests==2.32.3
-setuptools==74.1.1
+setuptools==78.1.1
 six==1.16.0
 soupsieve==2.8.3
 typing-extensions==4.15.0
